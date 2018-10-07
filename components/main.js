@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
+import { Container, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
 
 class Main extends Component {
   constructor(props){
@@ -19,9 +20,23 @@ class Main extends Component {
   }
   render() {
     return (
-      <View>
-        <Button onPress={() => {this.props.navigation.goBack()} } title="Back" />
-      </View>
+      <Container>
+        <Header>
+          <Left>
+            <Button onPress={() => {this.props.navigation.goBack()} } transparent >
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Header</Title>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Icon name='menu' />
+            </Button>
+          </Right>
+        </Header>
+      </Container>
     );
   }
 }
