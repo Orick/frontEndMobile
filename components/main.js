@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Container, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
+import { Container, Header, Left, Body, Right, Button, Icon, Title,  Drawer } from 'native-base';
+import SideBar from './sidebar.js';
 
 class Main extends Component {
   constructor(props){
@@ -9,33 +9,37 @@ class Main extends Component {
       email: '',
       pass : ''
     };
-    this.list = this.list.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
   }
   componentWillMount(){
-    
+  }
+
+  closeDrawer(){
+    this._drawer._root.close()
+  }
+  openDrawer(){
+    this._drawer._root.open()
   }
   
-  list(){
-
-  }
-  render() {
-    return (
+  render() {    
+    return (        
       <Container>
-        <Header>
-          <Left>
-            <Button onPress={() => {this.props.navigation.goBack()} } transparent >
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Header</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
-          </Right>
-        </Header>
+        <Drawer
+          ref={(ref) => { this._drawer = ref; }}
+          content={<SideBar navigator={this._navigator} />}
+          onClose={() => this.closeDrawer()} >
+          <Header>
+            <Left>
+              <Button transparent onPress={()=>this.openDrawer()}>
+                <Icon name='menu' />
+              </Button>
+            </Left>
+            <Body>
+              <Title>SMartCetero</Title>
+            </Body>
+          </Header>
+        </Drawer>
       </Container>
     );
   }
