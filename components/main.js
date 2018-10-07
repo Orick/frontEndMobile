@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { Button, View } from 'react-native';
 
 class Main extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            email: '',
-            pass : ''
-        };
-
-        this.list = this.list.bind(this);
+  constructor(props){
+    super(props);
+    this.state = {
+      email: '',
+      pass : ''
+    };
+    this.list = this.list.bind(this);
   }
   componentWillMount(){
     

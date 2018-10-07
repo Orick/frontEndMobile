@@ -14,6 +14,7 @@ class Login extends Component {
         this.logear = this.logear.bind(this);
         this.desLogear = this.desLogear.bind(this);
   }
+
   componentWillMount(){
     firebase.auth().onAuthStateChanged((user) => {
         console.log(user);
@@ -47,12 +48,12 @@ class Login extends Component {
   }
 
   desLogear(){
-      firebase.auth().signOut()
-        .then( ok => {
-            console.log('DESLOG -->',ok);
-        })
-        .catch( error => {
-            console.log('ERROR -->',error);
+        firebase.auth().signOut()
+            .then( ok => {
+                console.log('DESLOG -->',ok);
+            })
+            .catch( error => {
+                console.log('ERROR -->',error);
         });
   }
 

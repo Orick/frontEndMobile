@@ -18,7 +18,8 @@ const Navigate = createStackNavigator(
     Main
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Login',
+    headerMode: 'none'
   }
 );
 
