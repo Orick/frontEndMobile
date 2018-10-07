@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import Login from './components/login';
 import Main from './components/main';
+import Notification from './components/notification';
 import { createStackNavigator } from 'react-navigation';
 
 // const instructions = Platform.select({
@@ -15,7 +16,8 @@ import { createStackNavigator } from 'react-navigation';
 const Navigate = createStackNavigator(
   {
     Login,
-    Main
+    Main,
+    Notification
   },
   {
     initialRouteName: 'Login',
