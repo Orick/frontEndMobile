@@ -14,10 +14,10 @@ class Sidebar extends Component {
     componentWillMount(){
     }      
     signOut () {
-        let resetAction = NavigationActions.reset({
+        var resetAction = NavigationActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Login'})
+                NavigationActions.navigate({ routeName: "Login"})
             ]
         });
         console.log(resetAction);
@@ -43,7 +43,7 @@ class Sidebar extends Component {
                         
                         <ListItem
                         button
-                        onPress={() => {this.props.navigation.navigate('Notification',{ idMacetero: 'maceteroaleeh'} )} }>
+                        onPress={() => {this.props.navigation.navigate("Notification",{ idMacetero: 'maceteroaleeh'} )} }>
                             <Text>Ver Notificaciones</Text>
                         </ListItem>
                         
