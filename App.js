@@ -3,6 +3,8 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import Login from './components/login';
 import Main from './components/main';
 import Notification from './components/notification';
+import recuperarContrasena from './components/recuperarContrasena';
+import crearUsuario from './components/crearUsuario';
 import { createStackNavigator } from 'react-navigation';
 
 // const instructions = Platform.select({
@@ -17,7 +19,9 @@ const Navigate = createStackNavigator(
   {
     Login,
     Main,
-    Notification
+    Notification,
+    recuperarContrasena,
+    crearUsuario
   },
   {
     initialRouteName: 'Login',
