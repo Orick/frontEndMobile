@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, Modal, View, TouchableHighlight} from 'react-native';
+import {StyleSheet, Image, Dimensions} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
 import firebase from 'react-native-firebase';
-
+const {width} = Dimensions.get('window');
 
 class Login extends Component {
     constructor(props){
@@ -71,34 +71,43 @@ class Login extends Component {
 
   render() {
     return (
-    <Container style= {{backgroundColor:'#00b359'}}>
+    <Container>
+        <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
         <Content>
+            <Image source={require('./../src/img/logo.png')} style={styles.logo}/>
             <Form>
+                <Content style={styles.contenedorTexto}>
+                <Image source={require('./../src/img/email.png')} style={styles.emailPass}/>
                 <Input 
                     placeholder="Usuario" 
                     style={styles.text}
                     onChangeText={(text) => this.setState({email:text})}
                 />
+                </Content>
+
+                <Content style={styles.contenedorTexto}>
+                <Image source={require('./../src/img/pass.png')} style={styles.emailPass}/>
                 <Input 
-                    placeholder="Contraseña"
+                    placeholder="Contraseña" 
                     style={styles.text}
                     onChangeText={(text) => this.setState({pass:text})}
                 />
+                </Content>
             </Form>
             <Button rounded success style={styles.buttons}onPress={() => {this.logear()} } >
                 <Text>Logear</Text>
             </Button>
+            <Content style={{flex: 1}}>
+                <Button style={styles.crear} transparent light onPress={() => { this.props.navigation.push('crearUsuario'); }}>
+                    <Text>Crear Usuario</Text>
+                </Button>
 
+                <Button style={styles.recordar} transparent light onPress={() => { this.props.navigation.push('recuperarContrasena'); }}>
+                    <Text>Recordar Contraseña</Text>
+                </Button>
+            </Content>
             <Button onPress={() => {this.desLogear()} }>
             <Text>Deslogear</Text>
-            </Button>
-
-            <Button transparent light onPress={() => { this.props.navigation.push('crearUsuario'); }}>
-                <Text>Crear Usuario</Text>
-            </Button>
-
-            <Button transparent light onPress={() => { this.props.navigation.push('recuperarContrasena'); }}>
-                <Text>Recordar Contraseña</Text>
             </Button>
         </Content>
     </Container>
@@ -170,18 +179,55 @@ class Login extends Component {
 </View> */}
 
 const styles = StyleSheet.create({
-    text: {
+    contenedorTexto:{
+        opacity: 0.8,
         backgroundColor: '#32CD32',
         borderRadius: 25,
         marginLeft: 10,
         marginRight: 10,
-        paddingLeft: 30,
-        opacity: 0.5,
+        marginBottom: 15
+    },
+    emailPass:{
+        position:"absolute",
+        marginLeft: 10,
+        marginTop: 5,
+        height: 40,
+        width: 40 
+    },
+    text: {
+        marginLeft: 50,
+        color:'black'
     },
     buttons: {
         flex: 1,
         marginLeft: 10,
         marginRight: 10,
+        marginBottom: 15,
+    },
+    logo: {
+        height: 200, 
+        width: 200,
+        alignSelf: "center",
+        marginTop: 50,
+        marginBottom: 20 
+    },
+    fondo:{
+        height: 1000, 
+        flex:1,
+        position:"absolute",
+        transform: [
+            { translateX: -250 },
+            { translateY: -330 }
+          ]
+    },
+    recordar:{
+        width: width/2-1,
+        position:"absolute",
+        right: 0,
+        paddingRight:-20
+    },
+    crear:{
+        width: width/2-1
     }
 });
 
