@@ -8,8 +8,11 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
-            email: '',
-            pass : '',
+            email: "a",
+            pass : "a",
+            textUsuario: "",
+            textPass: "",
+            textLogin:""
             // modalVisibleRecordar: false,
             // modalVisibleCrear: false
         };
@@ -30,7 +33,7 @@ class Login extends Component {
             }
         });
     }
-  
+    
     // mostrarRecordarContrasena(visible){
     //     this.setState({modalVisibleRecordar: visible});
     // }
@@ -40,23 +43,37 @@ class Login extends Component {
 
   logear(){
     console.log(this.state.email, this.state.pass);
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
-        .then(goodLogin => {
-            console.log('User -->',goodLogin);
-            goodLogin.user.reload();
-            goodLogin.user.getIdToken()
-                .then(Token => {
-                    console.log("Token -->", Token);
-                    this.props.navigation.navigate('Main');
-                }).catch(function (error) {
-                    console.log('error sacando token');
-                    console.log('error: ', error);
+    if(this.state.email){
+        if(this.state.pass){
+            this.setState({textUsuario:"",textPass:"",textLogin:"Cargando..."});
+            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
+                .then(goodLogin => {
+                    console.log('User -->',goodLogin);
+                    goodLogin.user.reload();
+                    goodLogin.user.getIdToken()
+                        .then(Token => {
+                            console.log("Token -->", Token);
+                            this.props.navigation.navigate('Main');
+                        }).catch(function (error) {
+                            console.log('error sacando token');
+                            console.log('error: ', error);
+                        });
+                })
+                .catch(error => {
+                    this.setState({textUsuario:"",textPass:"",textLogin:"Email o contraseña invalido"});
+                    console.log('error Logeando');
+                    console.log(error);
                 });
-        })
-        .catch(error => {
-            console.log('error Logeando');
-            console.log(error);
-        });
+        }else{
+            this.setState({textUsuario:"",textPass:"Requerido",textLogin:""});
+        }
+    }else{
+        if(this.state.pass){
+            this.setState({textUsuario:"Requerido",textPass:"",textLogin:""});
+        }else{
+            this.setState({textUsuario:"Requerido",textPass:"Requerido",textLogin:""});
+        }
+    }
   }
 
   desLogear(){
@@ -78,25 +95,47 @@ class Login extends Component {
             <Form>
                 <Content style={styles.contenedorTexto}>
                 <Image source={require('./../src/img/email.png')} style={styles.emailPass}/>
-                <Input 
-                    placeholder="Usuario" 
-                    style={styles.text}
-                    onChangeText={(text) => this.setState({email:text})}
-                />
+                <Item style={styles.item}>
+                    <Input 
+                        autoCorrect={false}
+                        placeholder="Usuario" 
+                        style={styles.text}
+                        onChangeText={(text) => this.setState({email:text})}
+                    />
+                </Item>
                 </Content>
-
+                <Content style={{alignSelf: 'flex-end', height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textUsuario}</Text>
+                    </Item>
+                </Content>
+                
                 <Content style={styles.contenedorTexto}>
                 <Image source={require('./../src/img/pass.png')} style={styles.emailPass}/>
-                <Input 
-                    placeholder="Contraseña" 
-                    style={styles.text}
-                    onChangeText={(text) => this.setState({pass:text})}
-                />
+                <Item last style={styles.item}>
+                    <Input 
+                        style={styles.text}
+                        secureTextEntry={true} 
+                        onChangeText={(text) => this.setState({pass:text})}
+                        placeholder="Contraseña" 
+                    >
+                    </Input>
+                </Item>
+                </Content>
+                <Content style={{alignSelf: 'flex-end',height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textPass}</Text>
+                    </Item>
                 </Content>
             </Form>
-            <Button rounded success style={styles.buttons}onPress={() => {this.logear()} } >
+            <Button rounded success style={styles.buttonLogin} onPress={() => {this.logear()} } >
                 <Text>Logear</Text>
             </Button>
+            <Content style={{alignSelf: 'center',height:20}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.loginInfo}>{this.state.textLogin}</Text>
+                    </Item>
+            </Content>
             <Content style={{flex: 1}}>
                 <Button style={styles.crear} transparent light onPress={() => { this.props.navigation.push('crearUsuario'); }}>
                     <Text>Crear Usuario</Text>
@@ -185,7 +224,6 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 15
     },
     emailPass:{
         position:"absolute",
@@ -203,6 +241,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 15,
+    },
+    buttonLogin:{
+        flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 5
     },
     logo: {
         height: 200, 
@@ -224,11 +268,30 @@ const styles = StyleSheet.create({
         width: width/2-1,
         position:"absolute",
         right: 0,
-        paddingRight:-20
+        paddingLeft:5
     },
     crear:{
         width: width/2-1
+    },
+    textUsuario:{
+        paddingTop:1,
+        paddingBottom:4,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+    },
+    item:{
+        borderColor:'transparent'
+    },
+    loginInfo:{
+        paddingTop:1,
+        paddingBottom:8,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+        
     }
+    
 });
 
 export default Login;
