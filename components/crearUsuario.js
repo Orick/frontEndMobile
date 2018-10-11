@@ -10,24 +10,44 @@ class crearUsuario extends Component {
         this.state = {
             email: '',
             pass: '',
-            visibleCreate: false,
-            textCreate: ''
+            textCreate: '',
+            textUsuario: "",
+            textPass: ""
         };
         this.crearUsuario = this.crearUsuario.bind(this);
     }
     crearUsuario(){
-        fetch('http://142.93.125.238/user/create',{
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: "email="+this.state.email+"&password="+this.state.pass
-                })
-        .then(response => response.json())
-        .then(result => {
-            this.setState({
-                visibleCreate: true,
-                textCreate: result.description
-            });
-        });
+        if(this.state.email){
+            if(this.state.pass){
+                this.setState({textUsuario:"",textPass:"",textCreate:"Cargando..."});
+                fetch('http://142.93.125.238/user/create',{
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            body: "email="+this.state.email+"&password="+this.state.pass
+                        })
+                .then(response => response.json())
+                .then(result => {
+                    if(result.description =='Firebase error, creando usuario'){
+                        this.setState({
+                            textCreate: "Email no valido"
+                        });
+                    }else{
+                        this.setState({
+                            textCreate: result.description
+                        });
+                    }
+                    
+                })                
+            }else{
+                this.setState({textUsuario:"",textPass:"Requerido",textCreate:""});
+            }
+        }else{
+            if(this.state.pass){
+                this.setState({textUsuario:"Requerido",textPass:"",textCreate:""});
+            }else{
+                this.setState({textUsuario:"Requerido",textPass:"Requerido",textCreate:""});
+            }
+        }
     }
 
     render() {
@@ -39,26 +59,52 @@ class crearUsuario extends Component {
         <Form>
             <Content style={styles.contenedorTexto}>
             <Image source={require('./../src/img/email.png')} style={styles.emailPass}/>
-            <Input 
-                placeholder="Usuario" 
-                style={styles.text}
-                onChangeText={(text) => this.setState({email:text})}
-            />
+            <Item style={styles.item}>
+                <Input 
+                    autoCorrect={false}
+                    placeholder="Usuario" 
+                    style={styles.text}
+                    onChangeText={(text) => this.setState({email:text})}
+                />
+            </Item>
+        
+            </Content>
+
+            <Content style={{alignSelf: 'flex-end', height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textUsuario}</Text>
+                    </Item>
             </Content>
 
             <Content style={styles.contenedorTexto}>
             <Image source={require('./../src/img/pass.png')} style={styles.emailPass}/>
-            <Input 
-                placeholder="Contraseña" 
-                style={styles.text}
-                onChangeText={(text) => this.setState({pass:text})}
-            />
+            <Item last style={styles.item}>
+                <Input 
+                    placeholder="Contraseña" 
+                    style={styles.text}
+                    secureTextEntry={true} 
+                    onChangeText={(text) => this.setState({pass:text})}
+                    >
+                </Input>
+            </Item>
             </Content>
+            
+            <Content style={{alignSelf: 'flex-end',height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textPass}</Text>
+                    </Item>
+            </Content>
+
         </Form>
-        <Button rounded success style={styles.buttons} onPress={() => {this.crearUsuario()} } >
+
+        <Button rounded success style={styles.buttonLogin} onPress={() => {this.crearUsuario()} } >
             <Text>Crear Usuario</Text>
         </Button>
-        <Text hide={this.state.visibleCreate}>{this.state.textCreate}</Text>
+        <Content style={{alignSelf: 'center',height:20}}>
+            <Item style={styles.item}>
+                <Text style={styles.loginInfo}>{this.state.textCreate}</Text>
+            </Item>
+        </Content>
         <Button onPress={() => {this.props.navigation.goBack()} }>
             <Text>Volver</Text>
         </Button>
@@ -104,7 +150,6 @@ class crearUsuario extends Component {
         borderRadius: 25,
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 15
     },
     emailPass:{
         position:"absolute",
@@ -122,6 +167,12 @@ class crearUsuario extends Component {
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 15,
+    },
+    buttonLogin:{
+        flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 5
     },
     logo: {
         height: 200, 
@@ -143,11 +194,30 @@ class crearUsuario extends Component {
         width: width/2-1,
         position:"absolute",
         right: 0,
-        paddingRight:-20
+        paddingLeft:5
     },
     crear:{
         width: width/2-1
+    },
+    textUsuario:{
+        paddingTop:1,
+        paddingBottom:4,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+    },
+    item:{
+        borderColor:'transparent'
+    },
+    loginInfo:{
+        paddingTop:1,
+        paddingBottom:8,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+        
     }
+    
 });
 
 export default crearUsuario;

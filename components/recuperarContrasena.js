@@ -9,25 +9,31 @@ class recuperarContrasena extends Component {
         super(props);
         this.state = {
             email: '',
-            visibleUpdate: false,
+            textUsuario: "",
             textUpdate: ''
         };
         this.recuperar = this.recuperar.bind(this);
         
     }
     recuperar(){
-        firebase.auth().sendPasswordResetEmail(this.state.email).then(() => {
-            this.setState({
-                visibleUpdate: true,
-                textUpdate: 'Se ha enviado un correo con las instrucciones'
+        if(this.state.email){
+            this.setState({textUsuario:"",textUpdate:"Cargando..."});
+            firebase.auth().sendPasswordResetEmail(this.state.email).then(() => {
+                this.setState({
+                    textUsuario:"",
+                    textUpdate: 'Se ha enviado un correo con las instrucciones'
+                });
+            }).catch((error) => {
+                console.log(error);
+                this.setState({
+                    textUsuario:"",
+                    textUpdate: 'Email no registrado'
+                });
             });
-        }).catch((error) => {
-            this.setState({
-                visibleUpdate: true,
-                textUpdate: 'Error inesperado, intente mas tarde'
-            });
-        });
-    }
+        }else{
+                this.setState({textUsuario:"Requerido",textUpdate:""});
+        }
+    }   
     
 
     render() {
@@ -39,20 +45,33 @@ class recuperarContrasena extends Component {
                     <Form>
                         <Content style={styles.contenedorTexto}>
                         <Image source={require('./../src/img/email.png')} style={styles.emailPass}/>
-                        <Input 
-                            placeholder="Usuario" 
-                            style={styles.text}
-                            onChangeText={(text) => this.setState({email:text})}
-                        />
+                        <Item style={styles.item}>
+                            <Input 
+                                autoCorrect={false}
+                                placeholder="Usuario" 
+                                style={styles.text}
+                                onChangeText={(text) => this.setState({email:text})}
+                            />
+                        </Item>
+                        </Content>
+                        <Content style={{alignSelf: 'flex-end', height:28}}>
+                            <Item style={styles.item}>
+                                <Text style={styles.textUsuario}>{this.state.textUsuario}</Text>
+                            </Item>
                         </Content>
                     </Form>
-                    <Button rounded success style={styles.buttons}onPress={() => {this.recuperar()} } >
+
+                    <Button rounded success style={styles.buttonLogin} onPress={() => {this.recuperar()} } >
                         <Text>Recuperar</Text>
                     </Button>
+                    <Content style={{alignSelf: 'center',height:20}}>
+                            <Item style={styles.item}>
+                                <Text style={styles.loginInfo}>{this.state.textUpdate}</Text>
+                            </Item>
+                    </Content>
                     <Button onPress={() => {this.props.navigation.goBack()} }>
                         <Text>Volver</Text>
                     </Button>
-                    <Text hide={this.state.visibleUpdate}>{this.state.textUpdate}</Text>
                 </Content>
             </Container>
         );
@@ -86,7 +105,6 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 15
     },
     emailPass:{
         position:"absolute",
@@ -104,6 +122,12 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 15,
+    },
+    buttonLogin:{
+        flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 5
     },
     logo: {
         height: 200, 
@@ -125,11 +149,29 @@ const styles = StyleSheet.create({
         width: width/2-1,
         position:"absolute",
         right: 0,
-        paddingRight:-20
+        paddingLeft:5
     },
     crear:{
         width: width/2-1
+    },
+    textUsuario:{
+        paddingTop:1,
+        paddingBottom:4,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+    },
+    item:{
+        borderColor:'transparent'
+    },
+    loginInfo:{
+        paddingTop:1,
+        paddingBottom:8,
+        fontSize: 15,
+        paddingRight: 20,
+        color:'white',
+        
     }
+    
 });
-
 export default recuperarContrasena;
