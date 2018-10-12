@@ -27,6 +27,8 @@ class Login extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             console.log(user);
             if(user){
+                this.setState({textUsuario:"",textPass:"",textLogin:""}); 
+                //this.props.navigation.navigate('Main');
                 console.log('logeado');
             }else{
                 console.log('No logeado');
@@ -48,12 +50,13 @@ class Login extends Component {
             this.setState({textUsuario:"",textPass:"",textLogin:"Cargando..."});
             firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
                 .then(goodLogin => {
-                    console.log('User -->',goodLogin);
+                    
                     goodLogin.user.reload();
                     goodLogin.user.getIdToken()
                         .then(Token => {
-                            console.log("Token -->", Token);
+                            this.setState({textUsuario:"",textPass:"",textLogin:""}); 
                             this.props.navigation.navigate('Main');
+                            
                         }).catch(function (error) {
                             console.log('error sacando token');
                             console.log('error: ', error);
@@ -137,11 +140,18 @@ class Login extends Component {
                     </Item>
             </Content>
             <Content style={{flex: 1}}>
-                <Button style={styles.crear} transparent light onPress={() => { this.props.navigation.push('crearUsuario'); }}>
+                <Button style={styles.crear} transparent light onPress={() => { 
+                    this.setState({textUsuario:"",textPass:"",textLogin:""}); 
+                    this.props.navigation.push('crearUsuario'); 
+                    
+                    }}>
                     <Text>Crear Usuario</Text>
                 </Button>
 
-                <Button style={styles.recordar} transparent light onPress={() => { this.props.navigation.push('recuperarContrasena'); }}>
+                <Button style={styles.recordar} transparent light onPress={() => { 
+                    this.setState({textUsuario:"",textPass:"",textLogin:""}); 
+                    this.props.navigation.push('recuperarContrasena'); 
+                    }}>
                     <Text>Recordar Contraseña</Text>
                 </Button>
             </Content>
