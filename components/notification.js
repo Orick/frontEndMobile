@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, Button, View, TextInput} from 'react-native';
+//import {Platform, StyleSheet, Text, Button, View, TextInput} from 'react-native';
+import { StyleSheet, Image } from 'react-native';
+import { Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Thumbnail,Title } from 'native-base';
 import firebase from 'react-native-firebase';
 
 
@@ -18,15 +20,72 @@ class Notification extends Component {
   }
 
   componentWillMount(){
-
+    const { navigation } = this.props;
+    const idMacetero = navigation.getParam('idMacetero', 'Sinnombre');
+    this.macetero(idMacetero);
   }
   
   notificationList() {
 
-    this.state.jsonCompleto.map((data) => {
+    return this.state.tipo.map((data,index) => {
+      let Agua = './../src/img/Agua2.png';
+      let Luz = './../src/img/Luz2.png';
+      let Humedad = './../src/img/Humedad2.png';
+      let uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+      if(data == 'Agua'){
       return (
-        <View><Text>{data.tipo}, {data.descripcion}, {data.fechaNot}</Text></View>
+          <Card>
+            <CardItem header>
+            <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)} </Text>  
+            <Image source={require(Agua)} style={styles.agua}/>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                 {this.state.descripcion[index]}
+                </Text>
+              </Body>
+            </CardItem>
+         </Card>
+
       )
+    }
+    if(data == 'Humedad'){
+      return (
+        <Card>
+          <CardItem header>
+          <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)} </Text> 
+          <Image source={require(Humedad)} style={styles.humedad}/>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Text>
+               {this.state.descripcion[index]}
+              </Text>
+            </Body>
+          </CardItem>
+       </Card>
+
+    )
+    }
+    if(data == 'Luz'){
+      return (
+        <Card>
+          <CardItem header>
+          <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)}  </Text>
+          <Image source={require(Luz)} style={styles.luz}/>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Text>
+               {this.state.descripcion[index]}
+              </Text>
+            </Body>
+          </CardItem>
+       </Card>
+
+    )
+    }
     })
 
 }
@@ -53,7 +112,7 @@ class Notification extends Component {
         result.data.map(valor => {
             tipoarr.push(valor.tipo);
             descripcionarr.push(valor.descripcion);
-            fechaNotarr.push(valor.fechaNot);
+            fechaNotarr.push(valor.createdAt);
         });
       this.setState({
         tipo: tipoarr,
@@ -75,18 +134,59 @@ class Notification extends Component {
 
   render() {
     const { navigation } = this.props;
-    const idMacetero = navigation.getParam('idMacetero', 'Sinnombre');
+    
     return (
-      <View >
-            <Text> Holi {this.state.tipo[0]}, {this.state.descripcion[0]}, {this.state.fechaNot[0]}</Text>
-            <Text> Holi {this.state.tipo[1]}, {this.state.descripcion[1]}, {this.state.fechaNot[1]}</Text>
-            <Text> Holi {this.state.tipo[2]}, {this.state.descripcion[2]}, {this.state.fechaNot[2]}</Text>
-            <Button onPress={() => {this.macetero(idMacetero)} } title="Macetero" />
-
-      </View>
+      <Container>
+        <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
+        <Header hasTabs style={styles.background}>
+            <Body>
+              <Title style={styles.titulo}>Notificaciones</Title>
+            </Body>
+          </Header>
+        <Content>
+            {this.notificationList()}
+        </Content>
+      </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  fondo:{
+      height: 1000, 
+      flex:1,
+      position:"absolute",
+      transform: [
+          { translateX: -250 },
+          { translateY: -330 }
+        ]
+  },
+  agua:{
+    //height: 40, 
+    marginLeft: 150,
+    //position:"absolute",
+  },
+  luz:{
+    //height: 40, 
+    marginLeft: 150,
+    //position:"absolute",
+  },
+  humedad:{
+    //height: 40, 
+    marginLeft: 180,
+    //position:"absolute",
+  },
+  text: {
+    color:'black'
+  },
+  titulo: {
+    textAlign: 'center',
+    color: 'black',
+  },
+  background:{
+    backgroundColor: '#32CD32'
+  },
+});
 
 export default Notification;
 
