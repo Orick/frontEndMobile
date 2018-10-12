@@ -34,7 +34,7 @@ class Notification extends Component {
       let uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
       if(data == 'Agua'){
       return (
-          <Card>
+          <Card key={index}>
             <CardItem header>
             <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)} </Text>  
             <Image source={require(Agua)} style={styles.agua}/>
@@ -52,7 +52,7 @@ class Notification extends Component {
     }
     if(data == 'Humedad'){
       return (
-        <Card>
+        <Card key={index}>
           <CardItem header>
           <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)} </Text> 
           <Image source={require(Humedad)} style={styles.humedad}/>
@@ -70,7 +70,7 @@ class Notification extends Component {
     }
     if(data == 'Luz'){
       return (
-        <Card>
+        <Card key={index}>
           <CardItem header>
           <Text style={styles.text}> {this.state.fechaNot[index].slice(0,10)}  </Text>
           <Image source={require(Luz)} style={styles.luz}/>

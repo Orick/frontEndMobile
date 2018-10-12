@@ -5,6 +5,10 @@ import Main from './components/main';
 import Notification from './components/notification';
 import recuperarContrasena from './components/recuperarContrasena';
 import crearUsuario from './components/crearUsuario';
+
+import agregarplanta from './components/agregarplanta';
+import agregarplantaform from './components/agregarplantaform';
+
 import { createStackNavigator } from 'react-navigation';
 
 // const instructions = Platform.select({
@@ -21,7 +25,9 @@ const Navigate = createStackNavigator(
     Main,
     Notification,
     recuperarContrasena,
-    crearUsuario
+    crearUsuario,
+    agregarplanta,
+    agregarplantaform
   },
   {
     initialRouteName: 'Login',

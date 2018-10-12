@@ -158,6 +158,13 @@ class Login extends Component {
             <Button onPress={() => {this.desLogear()} }>
             <Text>Deslogear</Text>
             </Button>
+            
+            <Button onPress={() => {this.props.navigation.navigate('Notification',{ idMacetero: 'maceteroaleeh'} )} }>
+            <Text> Notification </Text>
+            </Button>
+            <Button onPress={() => {this.props.navigation.push('agregarplanta');} }>
+            <Text>agregarplanta</Text>
+            </Button>
         </Content>
     </Container>
     );

@@ -15,7 +15,7 @@ class Main extends Component {
     this.maceterosList = this.maceterosList.bind(this);
   }
   componentWillMount(){
-    id_m = ['macetero22051','macetero22051','macetero22051','macetero22051','macetero22051','macetero22051'];
+    id_m = ['maceteroaleeh','maceteroaleeh2','maceteroaleeh3','maceteroaleeh3','maceteroaleeh3','maceteroaleeh3'];
     nombres_p = ['Planta 1','Planta 2','Planta 3','Planta 4','Planta 5','Planta 6'];
     
     this.setState({
@@ -34,7 +34,7 @@ class Main extends Component {
 maceterosList() {
     return this.state.maceteros.map((data,index) => {      
       return (
-        <Tab heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
+        <Tab key={index} heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
           <Planta idMacetero={data}/>
         </Tab>
       )
