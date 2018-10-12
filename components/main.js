@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import { Container, Header, Left, Body, Right, Text, Button, Icon, Title,  Drawer, Tab, Tabs, ScrollableTab } from 'native-base';
 import SideBar from './sidebar.js';
+import Planta from './planta';
 
 class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      email: '',
-      pass : ''
+      maceteros: [''],
+      plantas:['']
     };
     this.closeDrawer = this.closeDrawer.bind(this);
     this.openDrawer = this.openDrawer.bind(this);
+    this.maceterosList = this.maceterosList.bind(this);
   }
   componentWillMount(){
+    id_m = ['macetero22051','macetero22051','macetero22051','macetero22051','macetero22051','macetero22051'];
+    nombres_p = ['Planta 1','Planta 2','Planta 3','Planta 4','Planta 5','Planta 6'];
+    
+    this.setState({
+      maceteros: id_m,
+      plantas: nombres_p
+    });
   }
 
   closeDrawer(){
@@ -21,6 +30,17 @@ class Main extends Component {
   openDrawer(){
     this._drawer._root.open()
   }
+
+maceterosList() {
+    return this.state.maceteros.map((data,index) => {      
+      return (
+        <Tab heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
+          <Planta idMacetero={data}/>
+        </Tab>
+      )
+    })
+
+}
   
   render() {    
     return (        
@@ -30,7 +50,7 @@ class Main extends Component {
           content={<SideBar navigator={this._navigator} />}
           onClose={() => this.closeDrawer()} >
           
-          <Header hasTabs>
+          <Header hasTabs style={{backgroundColor: '#32CD32'}}>
             <Left>
               <Button transparent onPress={()=>this.openDrawer()}>
                 <Icon name='menu' />
@@ -42,22 +62,8 @@ class Main extends Component {
           </Header>
           
           <Tabs renderTabBar={()=> <ScrollableTab />}>
-          <Tab heading="Tab1">
-            <Text>Tab 1</Text>
-          </Tab>
-          <Tab heading="Tab2">
-            <Text>Tab 2</Text>
-          </Tab>
-          <Tab heading="Tab3">
-            <Text>Tab 3</Text>
-          </Tab>
-          <Tab heading="Tab4">
-            <Text>Tab 4</Text>
-          </Tab>
-          <Tab heading="Tab5">
-            <Text>Tab 5</Text>
-          </Tab>
-        </Tabs>
+            {this.maceterosList()}
+          </Tabs>
         </Drawer>
       </Container>
     );
