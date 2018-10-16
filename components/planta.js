@@ -1,37 +1,69 @@
-import React, {Component} from 'react';
-import {StyleSheet, Image, Dimensions,TouchableOpacity} from 'react-native';
-import { Container, Content, Form, Item, Input, Label, Button, Text, View } from 'native-base';
+import React, { Component } from 'react';
+import { StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Container, Content, Text } from 'native-base';
 import firebase from 'react-native-firebase';
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
+
+// import { createStackNavigator } from 'react-navigation';
+// import agregarplanta from './components/agregarplanta';
+// import agregarplantaform from './components/agregarplantaform';
 
 //import Planta from './planta';
 //<Planta idMacetero={"macetero2"}/>
+
+
+// const Navigate = createStackNavigator(
+//     {
+//       Planta,
+//       agregarplanta,
+//       agregarplantaform
+//     },
+//     {
+//       initialRouteName: 'Planta',
+//       headerMode: 'none'
+//     }
+//   );
+//falta la galeria
+
 
 class Planta extends Component {
     constructor(props){
         super(props);
         this.state = {
             email: '',
-            indicadorHumedad: 'transparent',
-            indicadorLuz: 'transparent',
-            indicadorAgua: 'transparent',
-            valueHumedad: 0,
-            valueLuz: 0,
-            valueAgua: 0,
+            estadoHumedad: 'transparent',
+            estadoLuz: 'transparent',
+            estadoAgua: 'transparent',
+            valueHumedad: '0',
+            valueLuz: '0',
+            valueAgua: '0',
+            estadoPlanta: ''
         };
         this.recargar = this.recargar.bind(this);
         this.fotos = this.fotos.bind(this);
+        this.estadoplanta =this.estadoplanta.bind(this);
     }
+
+    estadoplanta(hum, luz){
+        if(hum && luz){
+            return 'Buen estado'
+        }
+        if(hum || luz){
+            return 'Estado regular'
+        }
+        if(!hum && !luz){
+            return 'Mal estado'
+        }
+    }
+
     fotos(){
         //this.props.navigation.navigate('Fotos');
     }
     recargar(){
-        console.log("CLICK EN IMAGEN");
         firebase.auth().onAuthStateChanged((getuser) => {
             if(getuser){
                 getuser.getIdToken()
                         .then(Token => {
-                            console.log("Token 2 -->", Token);
                             console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
                             fetch('http://142.93.125.238/sensores/getLast',{
                                     method: 'POST',
@@ -41,10 +73,28 @@ class Planta extends Component {
                                 .then(response => response.json())
                                 .then(result => {
                                     console.log("LASTO: ->>", result);
-                                    this.setState({
-                                        valueHumedad: result.Humedad,
-                                        valueLuz: result.Luz,
-                                        valueAgua: result.Agua});
+                                    if(result.status == 1){
+                                        this.setState({
+                                            valueHumedad: result.Humedad,
+                                            valueLuz: result.Luz,
+                                            valueAgua: result.Agua,
+                                            estadoHumedad: result.estadoHumedad? 'green' : 'red',
+                                            estadoLuz: result.estadoLuz? 'green' : 'red',
+                                            estadoAgua: result.estadoAgua? 'green' : 'red',
+                                            estadoPlanta: this.estadoplanta(result.estadoHumedad,result.estadoLuz)
+                                        });
+                                    }else{
+                                        this.setState({
+                                            valueHumedad: 'Sin Datos',
+                                            valueLuz: 'Sin Datos',
+                                            valueAgua: 'Sin Datos',
+                                            estadoHumedad: 'transparent',
+                                            estadoLuz: 'transparent',
+                                            estadoAgua: 'transparent',
+                                            estadoPlanta: ''
+                                        });
+                                    }
+                                    
                                 })
                                 .catch( error => {
                                     console.log("fetch error : ", error);
@@ -61,14 +111,12 @@ class Planta extends Component {
     }
 
     //false descargar foto
-
-    componentDidMount(){
+    componentWillMount(){
         console.log(this.props);
         firebase.auth().onAuthStateChanged((getuser) => {
             if(getuser){
                 getuser.getIdToken()
                         .then(Token => {
-                            console.log("Token 2 -->", Token);
                             console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
                             fetch('http://142.93.125.238/sensores/getLast',{
                                     method: 'POST',
@@ -78,10 +126,28 @@ class Planta extends Component {
                                 .then(response => response.json())
                                 .then(result => {
                                     console.log("LASTO: ->>", result);
-                                    this.setState({
-                                        valueHumedad: result.Humedad,
-                                        valueLuz: result.Luz,
-                                        valueAgua: result.Agua});
+                                    if(result.status == 1){
+                                        this.setState({
+                                            valueHumedad: result.Humedad,
+                                            valueLuz: result.Luz,
+                                            valueAgua: result.Agua,
+                                            estadoHumedad: result.estadoHumedad? 'green' : 'red',
+                                            estadoLuz: result.estadoLuz? 'green' : 'red',
+                                            estadoAgua: result.estadoAgua? 'green' : 'red',
+                                            estadoPlanta: this.estadoplanta(result.estadoHumedad,result.estadoLuz)
+                                        });
+                                    }else{
+                                        this.setState({
+                                            valueHumedad: 'Sin Datos',
+                                            valueLuz: 'Sin Datos',
+                                            valueAgua: 'Sin Datos',
+                                            estadoHumedad: 'transparent',
+                                            estadoLuz: 'transparent',
+                                            estadoAgua: 'transparent',
+                                            estadoPlanta: ''
+                                        });
+                                    }
+                                    
                                 })
                                 .catch( error => {
                                     console.log("fetch error : ", error);
@@ -98,17 +164,17 @@ class Planta extends Component {
     }
 
     render() {
+        console.log(this.state.estadoLuz);
         return (
             <Container style={{flexDirection: 'row'}}>
                 <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
 
                 <Content style={
                     { 
-                        borderColor: this.state.indicadorHumedad,
+                        borderColor: this.state.estadoHumedad,
                         borderRadius: 20,
                         borderWidth: 5,
                         height:130,
-                        borderColor:'green',
                         backgroundColor:'white',
                         marginTop: 30,
                         marginRight: 0,
@@ -122,11 +188,10 @@ class Planta extends Component {
 
                 <Content style={
                     { 
-                        borderColor: this.state.indicadorLuz,
+                        borderColor: this.state.estadoLuz,
                         borderRadius: 20,
                         borderWidth: 5,
                         height:130,
-                        borderColor:'green',
                         backgroundColor:'white',
                         marginTop: 30,
                         marginRight: 15,
@@ -140,11 +205,10 @@ class Planta extends Component {
 
                 <Content style={
                     { 
-                        borderColor: this.state.indicadorAgua,
+                        borderColor: this.state.estadoAgua,
                         borderRadius: 20,
                         borderWidth: 5,
                         height:130,
-                        borderColor:'red',
                         backgroundColor:'white',
                         marginTop: 30,
                         marginRight:35,
@@ -156,7 +220,6 @@ class Planta extends Component {
                 </Content>
                 <Content style={styles.recargar}>
                     <TouchableOpacity onPress={ () => {
-                        console.log("CLIEN EN IMAGEN RECARGAR");
                         this.recargar();
                     }}>
                         <Image source={require('./../src/img/recargar.png')} style={{height:60,width:60}}/>
@@ -164,21 +227,20 @@ class Planta extends Component {
                 </Content>
                 <Content style={styles.fotos}>
                     <TouchableOpacity onPress={ () => {
-                        console.log("CLIEN EN IMAGEN IMAGENES");
                         this.fotos();
                     }}>
                         <Image source={require('./../src/img/imagenes.png')} style={{height:60,width:60}}/>
                     </TouchableOpacity>
                 </Content>
-                <Text style={{position:'absolute',left: (width/3) - 25, bottom:0,marginBottom:140,fontSize:30, color:'white'}}>Nombre Planta</Text>
-                <Text style={{position:'absolute',left: (width/2) - 50, bottom:0,marginBottom:90,fontSize:20,color:'green'}}>Buen estado</Text>
+                <Text style={{position:'absolute',left: (width/3) - 25, bottom:0,marginBottom:100,fontSize:30, color:'white'}}>{this.state.estadoPlanta}</Text>
+                
 
             </Container>
         );
   }
 }
 
- const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     indicadoresHumedad:{
         height:130,
         backgroundColor:'green'

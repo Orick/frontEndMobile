@@ -54,6 +54,7 @@ class Login extends Component {
                     goodLogin.user.reload();
                     goodLogin.user.getIdToken()
                         .then(Token => {
+                            console.log('Token ->>>',Token);
                             this.setState({textUsuario:"",textPass:"",textLogin:""}); 
                             this.props.navigation.navigate('Main');
                             
