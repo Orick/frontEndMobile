@@ -7,7 +7,8 @@ import recuperarContrasena from './components/recuperarContrasena';
 import crearUsuario from './components/crearUsuario';
 
 import agregarplanta from './components/agregarplanta';
-import agregarplantaform from './components/agregarplantaform';
+import agregarPlantaForm from './components/agregarPlantaForm';
+import bluetooth from './components/bluetooth';
 
 import { createStackNavigator } from 'react-navigation';
 
@@ -27,7 +28,8 @@ const Navigate = createStackNavigator(
     recuperarContrasena,
     crearUsuario,
     agregarplanta,
-    agregarplantaform
+    agregarPlantaForm,
+    bluetooth
   },
   {
     initialRouteName: 'Login',

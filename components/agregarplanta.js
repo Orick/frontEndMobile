@@ -34,7 +34,7 @@ class agregarplanta extends Component {
             </Body>
           </Header>
         <Content style={styles.boton}>
-            <Button style={styles.boton} onPress={() => { this.props.navigation.push('agregarplantaform'); }}>
+            <Button style={styles.boton} onPress={() => { this.props.navigation.push('agregarPlantaForm'); }}>
                 <Image source={require('./../src/img/botonmas.png')} />
             </Button>
         </Content>
