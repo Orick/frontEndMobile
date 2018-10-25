@@ -10,10 +10,12 @@ class Main extends Component {
       maceteros: [''],
       plantas:['']
     };
-    this.closeDrawer = this.closeDrawer.bind(this);
-    this.openDrawer = this.openDrawer.bind(this);
     this.maceterosList = this.maceterosList.bind(this);
   }
+
+  static navigationOptions = ({ navigation }) => ({
+    drawerLabel: 'Inicio'
+  })
   componentWillMount(){
     id_m = ['maceteroaleeh','maceteroaleeh2','maceteroaleeh3','maceteroaleeh3','maceteroaleeh3','maceteroaleeh3'];
     nombres_p = ['Planta 1','Planta 2','Planta 3','Planta 4','Planta 5','Planta 6'];
@@ -24,47 +26,32 @@ class Main extends Component {
     });
   }
 
-  closeDrawer(){
-    this._drawer._root.close()
-  }
-  openDrawer(){
-    this._drawer._root.open()
-  }
+  maceterosList() {
+      return this.state.maceteros.map((data,index) => {      
+        return (
+          <Tab key={index} heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
+            <Planta idMacetero={data}/>
+          </Tab>
+        )
+      })
 
-maceterosList() {
-    return this.state.maceteros.map((data,index) => {      
-      return (
-        <Tab key={index} heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
-          <Planta idMacetero={data}/>
-        </Tab>
-      )
-    })
-
-}
+  }
   
   render() {    
     return (        
-      <Container>
-        <Drawer
-          ref={(ref) => { this._drawer = ref; }}
-          content={<SideBar navigator={this._navigator} />}
-          onClose={() => this.closeDrawer()} >
-          
-          <Header hasTabs style={{backgroundColor: '#32CD32'}}>
-            <Left>
-              <Button transparent onPress={()=>this.openDrawer()}>
-                <Icon name='menu' />
-              </Button>
-            </Left>
-            <Body>
-              <Title>SMartCetero</Title>
-            </Body>
-          </Header>
-          
-          <Tabs renderTabBar={()=> <ScrollableTab />}>
-            {this.maceterosList()}
-          </Tabs>
-        </Drawer>
+      <Container>          
+        <Header hasTabs style={{backgroundColor: '#32CD32'}}>
+          <Left>
+            <Icon name='menu' onPress={()=>this.props.navigation.openDrawer()}/>
+          </Left>
+          <Body>
+            <Title>SMartCetero</Title>
+          </Body>
+        </Header>
+        
+        <Tabs renderTabBar={()=> <ScrollableTab />}>
+          {this.maceterosList()}
+        </Tabs>
       </Container>
     );
   }
