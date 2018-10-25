@@ -22,24 +22,30 @@ class agregarPlantaForm extends Component {
 
     agregarMacetero(){
 
-        let user = firebase.auth().currentUser;
-        user.getIdToken(true)
-        .then(Token =>{
+        firebase.auth().onAuthStateChanged((getuser) => {
+            if(getuser){
+                getuser.getIdToken()
+                .then(Token => {
             this.setState({textUsuario:"",textPass:"",textCreate:"Cargando..."});
             fetch('http://142.93.125.238/macetero/insert',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: "token="+this.Token+"&idMacetero="+this.state.idMacetero+"&nombreRed="+this.state.nombreRed+"&passRed="+this.state.pass
+                body: "token="+Token+"&idMacetero="+this.state.idMacetero+"&nombreRed="+this.state.nombreRed+"&passRed="+this.state.pass
             })
             .then(response => response.json())
             .then(result => {
                     this.setState({
-                    textCreate: result.description
+                    textCreate: result.description + Token
                     });
 
         
             })
-        })
+        }).catch(function (error) {
+            console.log('error sacando token');
+            console.log('error: ', error);
+        });
+            }
+        });
 
     }
 
