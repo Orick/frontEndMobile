@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, Dimensions} from 'react-native';
-import { Container, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import { Container, Content, Form, Item, Picker, Input, Label, Button, Text, Icon } from 'native-base';
 const {width} = Dimensions.get('window');
 import firebase from 'react-native-firebase';
 
@@ -14,11 +14,32 @@ class agregarPlantaForm extends Component {
             pass: '',
             textCreate: '',
             textUsuario: "",
-            textPass: ""
+            textPass: "",
+            nombrePersonalizado: "",
+            selected: 0,
+            tipoPlanta: [],
+            idPlanta: []
         };
-        this.crearMacetero = this.crearMacetero.bind(this);
         this.agregarMacetero = this.agregarMacetero.bind(this);
+        this.onValueChange = this.onValueChange.bind(this);
+        this.plantasList = this.plantasList.bind(this);
     }
+
+    plantasList(){
+        return this.state.tipoPlanta.map((data,index) => {
+            return (
+                <Picker.Item label={data} value={this.state.idPlanta[index]} />
+                
+      
+            )
+          })
+    }
+
+    onValueChange(value) {
+        this.setState({
+          selected: value
+        });
+      }
 
     agregarMacetero(){
 
@@ -34,10 +55,15 @@ class agregarPlantaForm extends Component {
             })
             .then(response => response.json())
             .then(result => {
-                    this.setState({
-                    textCreate: result.description + Token
-                    });
-
+                fetch('http://142.93.125.238/macetero/asignarPlanta',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: "idMacetero="+this.state.idMacetero+"&estado=1&nombrePlanta="+this.state.nombrePersonalizado+"&tipoCuidado=1&idPlanta="+this.state.selected
+                })
+                .then(response => response,json())
+                .then(result2 => {
+                    this.setState({textCreate: result2.description });
+                })
         
             })
         }).catch(function (error) {
@@ -49,9 +75,31 @@ class agregarPlantaForm extends Component {
 
     }
 
-    crearMacetero(){
-       
+    obtenerPlantas(){
+        let tipoplanta = [];
+        let idplanta = [];
+        fetch('http://142.93.125.238/planta/all')
+            .then(res => res.json())
+            .then(result => {
+                result.data.map(valor => {
+                    tipoplanta.push(valor.tipoPlanta);
+                    idplanta.push(valor.id);
+                });
+                this.setState({
+                    tipoPlanta: tipoplanta,
+                    idPlanta: idplanta,
+                    selected: idplanta[0]
+                  });
+            })
+            .catch( error => {
+                console.log('error sacando token');
+                console.log('error: ', error);
+            });
     }
+
+    componentWillMount(){
+        this.obtenerPlantas();
+      }
 
     render() {
         return (
@@ -90,6 +138,46 @@ class agregarPlantaForm extends Component {
                 />
             </Item>
         
+            </Content>
+
+            <Content style={{alignSelf: 'flex-end', height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textUsuario}</Text>
+                    </Item>
+            </Content>
+            
+            <Content style={styles.contenedorTexto}>
+            <Image source={require('./../src/img/email.png')} style={styles.emailPass}/>
+            <Item style={styles.item}>
+                <Input 
+                    autoCorrect={false}
+                    placeholder="Nombre planta" 
+                    style={styles.text}
+                    onChangeText={(text) => this.setState({nombrePersonalizado:text})}
+                />
+            </Item>
+        
+            </Content>
+
+            <Content style={{alignSelf: 'flex-end', height:28}}>
+                    <Item style={styles.item}>
+                        <Text style={styles.textUsuario}>{this.state.textUsuario}</Text>
+                    </Item>
+            </Content>
+
+            <Content style={styles.contenedorTexto}>
+            
+            <Item picker style={styles.item}>
+              <Picker
+                mode="dropdown"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.selected}
+                onValueChange={this.onValueChange.bind(this)}
+              >
+                {this.plantasList()}
+              </Picker>
+            </Item>
             </Content>
 
             <Content style={{alignSelf: 'flex-end', height:28}}>
