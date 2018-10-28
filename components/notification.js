@@ -19,9 +19,14 @@ class Notification extends Component {
         this.notificationList = this.notificationList.bind(this);
   }
 
+  static navigationOptions = ({ navigation }) => ({
+    drawerLabel: 'Notificaciones'
+  })
+
   componentWillMount(){
     const { navigation } = this.props;
     const idMacetero = navigation.getParam('idMacetero', 'Sinnombre');
+    //const idMacetero = 'macetero22051';
     this.macetero(idMacetero);
   }
   
