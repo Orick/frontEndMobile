@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Text, Button, Icon, Title,  Drawer, Tab, Tabs, ScrollableTab } from 'native-base';
+import { Container, Header, Left, Body, Right, Text, Button, Icon, Title, Tab, Tabs, ScrollableTab } from 'native-base';
 //import SideBar from './sidebar.js';
 import Planta from './planta';
 import firebase from 'react-native-firebase';
@@ -9,14 +9,15 @@ class Main extends Component {
     super(props);
     this.state = {
       maceteros: [],
-      plantas: []
+      plantas: [],
+      selectMacetero: 'macetero22051'
     };
     this.maceterosList = this.maceterosList.bind(this);
   }
 
-  static navigationOptions = ({ navigation }) => ({
+  /* static navigationOptions = ({ navigation }) => ({
     drawerLabel: 'Inicio'
-  })
+  }) */
 
   maceterosList() {
       return this.state.maceteros.map((data,index) => {
@@ -77,12 +78,14 @@ class Main extends Component {
     }
   }
   
+  /* Icono a la izquierda del header, antigua funcion onPress={()=>this.props.navigation.openDrawer() */
+
   render() {
     return (        
       <Container>          
         <Header hasTabs style={{backgroundColor: '#32CD32'}}>
           <Left>
-            <Icon name='menu' onPress={()=>this.props.navigation.openDrawer()}/>
+            <Icon name='menu' onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: 'macetero22051'} )} }/>
           </Left>
           <Body>
             <Title>SMartCetero</Title>

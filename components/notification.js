@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 //import {Platform, StyleSheet, Text, Button, View, TextInput} from 'react-native';
 import { StyleSheet, Image } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Thumbnail,Title } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Thumbnail,Title, Icon } from 'native-base';
 import firebase from 'react-native-firebase';
 
 
@@ -19,14 +19,14 @@ class Notification extends Component {
         this.notificationList = this.notificationList.bind(this);
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    drawerLabel: 'Notificaciones'
-  })
+  /* static navigationOptions = ({ navigation }) => ({
+    drawerLabel: 'Notificaciones',
+    drawerLockMode: 'locked-closed'
+  }) */
 
   componentWillMount(){
     const { navigation } = this.props;
     const idMacetero = navigation.getParam('idMacetero', 'Sinnombre');
-    //const idMacetero = 'macetero22051';
     this.macetero(idMacetero);
   }
   
@@ -144,6 +144,9 @@ class Notification extends Component {
       <Container>
         <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
         <Header hasTabs style={styles.background}>
+            <Left>
+              <Icon name='menu' onPress={()=>this.props.navigation.goBack()}/>
+            </Left>
             <Body>
               <Title style={styles.titulo}>Notificaciones</Title>
             </Body>

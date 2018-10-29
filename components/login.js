@@ -23,9 +23,10 @@ class Login extends Component {
         // this.mostrarCrearUsuario = this.mostrarCrearUsuario.bind(this);
     }
 
-    static navigationOptions = ({ navigation }) => ({
-        drawerLabel: 'Cerrar Sesión'
-      })
+    /* static navigationOptions = ({ navigation }) => ({
+        drawerLabel: 'Cerrar Sesión',
+        drawerLockMode: 'locked-closed'
+    }) */
 
     componentWillMount(){
         firebase.auth().onAuthStateChanged((user) => {

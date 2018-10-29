@@ -9,6 +9,7 @@ import recuperarContrasena from './components/recuperarContrasena';
 import crearUsuario from './components/crearUsuario';
 import agregarplanta from './components/agregarplanta';
 import agregarPlantaForm from './components/agregarPlantaForm';
+import Menu from './components/menu';
 import bluetooth from './components/bluetooth';
 
 import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
@@ -21,7 +22,7 @@ import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-
 //     '22222',
 // });
 
-const CustomDrawerContentComponent = (props) => (
+/* const CustomDrawerContentComponent = (props) => (
   <Container>
     <Header style={styles.drawerHeader}>
       <Body style={{alignItems: 'center'}}>
@@ -49,11 +50,16 @@ const DrawerNav = createDrawerNavigator(
     contentComponent: CustomDrawerContentComponent,
     headerMode: 'none'
   }
-);
+); */
 
 const Navigate = createStackNavigator(
   {
-    DrawerNav,
+    //DrawerNav,
+    Main,
+    Menu,
+    Notification,
+    agregarplanta,
+    agregarPlantaForm,
     Login,
     recuperarContrasena,
     crearUsuario,
