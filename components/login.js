@@ -165,9 +165,6 @@ class Login extends Component {
             <Text>Deslogear</Text>
             </Button>
             
-            <Button onPress={() => {this.props.navigation.navigate('Notification',{ idMacetero: 'maceteroaleeh'} )} }>
-            <Text> Notification </Text>
-            </Button>
             <Button onPress={() => {this.props.navigation.push('agregarplanta');} }>
             <Text>agregarplanta</Text>
             </Button>
@@ -177,6 +174,11 @@ class Login extends Component {
   }
 }
 
+
+{/* Boton notificiones negro 
+<Button onPress={() => {this.props.navigation.navigate('Notification',{ idMacetero: 'maceteroaleeh'} )} }>
+<Text> Notification </Text>
+</Button> */}
 
 {/* <Modal
           animationType="slide"

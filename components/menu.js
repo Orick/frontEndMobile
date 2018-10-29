@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image} from 'react-native';
 import { Container, Content, List, ListItem, Text, Header, Body } from 'native-base';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 class Menu extends Component {
     constructor(props){
@@ -8,6 +9,7 @@ class Menu extends Component {
       this.state = {
         idMacActual: ''
       };
+      this.signOut = this.signOut.bind(this);
     }
 
     componentWillMount(){
@@ -16,7 +18,15 @@ class Menu extends Component {
         this.setState({
             idMacActual: idMacetero
         });
-      }
+    }
+
+    signOut () {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+          });
+          this.props.navigation.dispatch(resetAction);
+    }
 
     render() {
         return (        
@@ -31,7 +41,9 @@ class Menu extends Component {
 
                 <Content>
                     <List>
-                        <ListItem>
+                        <ListItem
+                        button
+                        onPress={() => {this.props.navigation.push('agregarPlantaForm')} }>
                             <Text>Agregar macetero</Text>
                         </ListItem>
                         
@@ -49,7 +61,9 @@ class Menu extends Component {
                             <Text>Ver Notificaciones</Text>
                         </ListItem>
                         
-                        <ListItem>
+                        <ListItem
+                        button
+                        onPress={() => {this.signOut()} }>
                             <Text>Cerrar sesion</Text>
                         </ListItem>
                     </List>
