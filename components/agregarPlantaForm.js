@@ -60,7 +60,7 @@ class agregarPlantaForm extends Component {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: "idMacetero="+this.state.idMacetero+"&estado=1&nombrePlanta="+this.state.nombrePersonalizado+"&tipoCuidado=1&idPlanta="+this.state.selected
                 })
-                .then(response => response,json())
+                .then(response => response.json())
                 .then(result2 => {
                     this.setState({textCreate: result2.description });
                 })
