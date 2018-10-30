@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image} from 'react-native';
-import { Container, Content, List, ListItem, Text, Header, Body } from 'native-base';
+import { Container, Content, List, ListItem, Text, Header, Body, Left, Icon, Title } from 'native-base';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 class Menu extends Component {
@@ -31,16 +31,23 @@ class Menu extends Component {
     render() {
         return (        
             <Container>
-                <Header style={styles.drawerHeader}>
-                    <Body style={{alignItems: 'center'}}>
-                        <Image
-                        style={styles.drawerImage}
-                        source={require('../src/img/logo.png')} />
+                <Header style={{backgroundColor: '#32CD32'}}>
+                    <Left>
+                        <Icon name='arrow-back' onPress={()=>this.props.navigation.goBack()}/>
+                    </Left>
+                    <Body>
+                        <Title>Opciones</Title>
                     </Body>
                 </Header>
 
                 <Content>
                     <List>
+                        <ListItem>
+                            <Image
+                            style={styles.drawerImage}
+                            source={require('../src/img/logo.png')} />
+                        </ListItem>
+
                         <ListItem
                         button
                         onPress={() => {this.props.navigation.push('agregarPlantaForm')} }>
@@ -75,13 +82,16 @@ class Menu extends Component {
 
 const styles = StyleSheet.create({
     drawerHeader: {
-      height: 200,
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      height: 100
     },
     drawerImage: {
       height: 150,
       width: 150,
-      borderRadius: 75
+      borderRadius: 75,
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginTop: "auto"
     }
 });
 

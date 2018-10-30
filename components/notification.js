@@ -143,9 +143,9 @@ class Notification extends Component {
     return (
       <Container>
         <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
-        <Header hasTabs style={styles.background}>
+        <Header style={styles.background}>
             <Left>
-              <Icon name='menu' onPress={()=>this.props.navigation.goBack()}/>
+              <Icon name='arrow-back' onPress={()=>this.props.navigation.goBack()}/>
             </Left>
             <Body>
               <Title style={styles.titulo}>Notificaciones</Title>

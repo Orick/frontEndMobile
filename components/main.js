@@ -94,6 +94,10 @@ class Main extends Component {
         
         <Tabs renderTabBar={()=> <ScrollableTab tabsContainerStyle={{backgroundColor: '#32CD32'}}/>}>
           {this.maceterosList()}
+
+          <Tab key={"agregarTab"} heading={"Agregar Planta"} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
+            <Text> Agregar planta </Text>
+          </Tab>
         </Tabs>
       </Container>
     );

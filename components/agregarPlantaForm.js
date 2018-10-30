@@ -28,9 +28,7 @@ class agregarPlantaForm extends Component {
     plantasList(){
         return this.state.tipoPlanta.map((data,index) => {
             return (
-                <Picker.Item label={data} value={this.state.idPlanta[index]} />
-                
-      
+                <Picker.Item key={index} label={data} value={this.state.idPlanta[index]} />
             )
           })
     }
