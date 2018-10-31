@@ -11,7 +11,8 @@ class Main extends Component {
     this.state = {
       maceteros: [],
       plantas: [],
-      selectMacetero: 'macetero22051'
+      selectMacetero: '',
+      currentTab: 0
     };
     this.maceterosList = this.maceterosList.bind(this);
     this.idMaceteroActTab = this.idMaceteroActTab.bind(this);
@@ -21,9 +22,13 @@ class Main extends Component {
     drawerLabel: 'Inicio'
   }) */
 
-  idMaceteroActTab(idMacetero) {
+  idMaceteroActTab(tab_index) {
     this.setState({
-      selectMacetero: idMacetero
+      currentTab: tab_index
+    });
+
+    this.setState({
+      selectMacetero: this.state.maceteros[tab_index]
     });
   }
 
@@ -96,14 +101,14 @@ class Main extends Component {
       <Container>          
         <Header hasTabs style={{backgroundColor: '#32CD32'}}>
           <Left>
-            <Icon name='menu' onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: this.state.selectMacetero} )} }/>
+            <Icon name='menu' style={{color: 'white'}} onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: this.state.selectMacetero} )} }/>
           </Left>
           <Body>
-            <Title>SMartCetero</Title>
+            <Title style={styles.titulo}>SMartCetero</Title>
           </Body>
         </Header>
         
-        <Tabs renderTabBar={()=> <ScrollableTab tabsContainerStyle={{backgroundColor: '#32CD32'}}/>}>
+        <Tabs initialPage={this.state.currentTab} onChangeTab={({ i }) => this.idMaceteroActTab(i)} renderTabBar={()=> <ScrollableTab tabsContainerStyle={{backgroundColor: '#32CD32'}}/>}>
           {this.maceterosList()}
 
           <Tab key={"agregarTab"} heading={"Agregar Planta"} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
@@ -125,6 +130,10 @@ const styles = StyleSheet.create({
       marginLeft: 10,
       marginRight: 10,
       marginTop: 10,
+  },
+  titulo: {
+    textAlign: 'center',
+    color: 'white',
   }
 });
 

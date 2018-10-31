@@ -33,10 +33,10 @@ class Menu extends Component {
             <Container>
                 <Header style={{backgroundColor: '#32CD32'}}>
                     <Left>
-                        <Icon name='arrow-back' onPress={()=>this.props.navigation.goBack()}/>
+                        <Icon name='arrow-back' style={{color: 'white'}} onPress={()=>this.props.navigation.goBack()}/>
                     </Left>
                     <Body>
-                        <Title>Opciones</Title>
+                        <Title style={styles.titulo}>Opciones</Title>
                     </Body>
                 </Header>
 
@@ -73,10 +73,6 @@ class Menu extends Component {
                         onPress={() => {this.signOut()} }>
                             <Text>Cerrar sesion</Text>
                         </ListItem>
-
-                        <ListItem>
-                            <Text>Id Macetero: {this.state.idMacActual}</Text>
-                        </ListItem>
                     </List>
                 </Content>
             </Container>
@@ -96,6 +92,10 @@ const styles = StyleSheet.create({
       marginLeft: "auto",
       marginRight: "auto",
       marginTop: "auto"
+    },
+    titulo: {
+      textAlign: 'center',
+      color: 'white',
     }
 });
 

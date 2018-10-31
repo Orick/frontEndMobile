@@ -145,7 +145,7 @@ class Notification extends Component {
         <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
         <Header style={styles.background}>
             <Left>
-              <Icon name='arrow-back' onPress={()=>this.props.navigation.goBack()}/>
+              <Icon name='arrow-back' style={{color: 'white'}} onPress={()=>this.props.navigation.goBack()}/>
             </Left>
             <Body>
               <Title style={styles.titulo}>Notificaciones</Title>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     textAlign: 'center',
-    color: 'black',
+    color: 'white',
   },
   background:{
     backgroundColor: '#32CD32'
