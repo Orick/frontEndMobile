@@ -73,6 +73,10 @@ class Menu extends Component {
                         onPress={() => {this.signOut()} }>
                             <Text>Cerrar sesion</Text>
                         </ListItem>
+
+                        <ListItem>
+                            <Text>Id Macetero: {this.state.idMacActual}</Text>
+                        </ListItem>
                     </List>
                 </Content>
             </Container>

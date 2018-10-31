@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Text, Button, Icon, Title, Tab, Tabs, ScrollableTab } from 'native-base';
+import { Container, Content, Header, Left, Body, Right, Text, Button, Icon, Title, Tab, Tabs, ScrollableTab } from 'native-base';
+import { StyleSheet, Image } from 'react-native';
 //import SideBar from './sidebar.js';
 import Planta from './planta';
 import firebase from 'react-native-firebase';
@@ -13,11 +14,18 @@ class Main extends Component {
       selectMacetero: 'macetero22051'
     };
     this.maceterosList = this.maceterosList.bind(this);
+    this.idMaceteroActTab = this.idMaceteroActTab.bind(this);
   }
 
   /* static navigationOptions = ({ navigation }) => ({
     drawerLabel: 'Inicio'
   }) */
+
+  idMaceteroActTab(idMacetero) {
+    this.setState({
+      selectMacetero: idMacetero
+    });
+  }
 
   maceterosList() {
       return this.state.maceteros.map((data,index) => {
@@ -58,13 +66,16 @@ class Main extends Component {
               nombres_p.push(data);
             });
 
-            console.log(nombres_m);
-            console.log(nombres_p);
-
             this.setState({
               maceteros: nombres_m,
               plantas: nombres_p
             });
+
+            if (nombres_m.length >= 1) {
+              this.setState({
+                selectMacetero: nombres_m[0]
+              });
+            }
           })
           .catch(function (error) {
             console.log('error consultando nombre de la planta');
@@ -85,7 +96,7 @@ class Main extends Component {
       <Container>          
         <Header hasTabs style={{backgroundColor: '#32CD32'}}>
           <Left>
-            <Icon name='menu' onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: 'macetero22051'} )} }/>
+            <Icon name='menu' onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: this.state.selectMacetero} )} }/>
           </Left>
           <Body>
             <Title>SMartCetero</Title>
@@ -96,12 +107,25 @@ class Main extends Component {
           {this.maceterosList()}
 
           <Tab key={"agregarTab"} heading={"Agregar Planta"} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
-            <Text> Agregar planta </Text>
+            <Content style={styles.boton}>
+              <Button style={styles.boton} onPress={() => { this.props.navigation.push('agregarPlantaForm'); }}>
+                  <Image source={require('./../src/img/botonmas.png')} />
+              </Button>
+            </Content>
           </Tab>
         </Tabs>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  boton:{
+      height: 335,
+      marginLeft: 10,
+      marginRight: 10,
+      marginTop: 10,
+  }
+});
 
 export default Main;
