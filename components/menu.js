@@ -7,7 +7,8 @@ class Menu extends Component {
     constructor(props){
       super(props);
       this.state = {
-        idMacActual: ''
+        idMacActual: '',
+        plantaMacActual: ''
       };
       this.signOut = this.signOut.bind(this);
     }
@@ -15,8 +16,10 @@ class Menu extends Component {
     componentWillMount(){
         const { navigation } = this.props;
         const idMacetero = navigation.getParam('idMaceteroSelec', 'NoId');
+        const plantaMacetero = navigation.getParam('nombrePlantaSelec', 'Noplanta');
         this.setState({
-            idMacActual: idMacetero
+            idMacActual: idMacetero,
+            plantaMacActual: plantaMacetero
         });
     }
 
@@ -58,7 +61,9 @@ class Menu extends Component {
                             <Text>Configurar macetero</Text>
                         </ListItem>
                         
-                        <ListItem>
+                        <ListItem
+                        button
+                        onPress={() => {this.props.navigation.push("eliminarplanta",{ idMacetero: this.state.idMacActual, plantaNombre: this.state.plantaMacActual})} }>
                             <Text>Eliminar macetero</Text>
                         </ListItem>
                         

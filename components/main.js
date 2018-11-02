@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Header, Left, Body, Right, Text, Button, Icon, Title, Tab, Tabs, ScrollableTab } from 'native-base';
 import { StyleSheet, Image } from 'react-native';
-//import SideBar from './sidebar.js';
 import Planta from './planta';
 import firebase from 'react-native-firebase';
 
@@ -12,6 +11,7 @@ class Main extends Component {
       maceteros: [],
       plantas: [],
       selectMacetero: '',
+      selectPlanta: '',
       currentTab: 0
     };
     this.maceterosList = this.maceterosList.bind(this);
@@ -28,7 +28,8 @@ class Main extends Component {
     });
 
     this.setState({
-      selectMacetero: this.state.maceteros[tab_index]
+      selectMacetero: this.state.maceteros[tab_index],
+      selectPlanta: this.state.plantas[tab_index]
     });
   }
 
@@ -78,7 +79,8 @@ class Main extends Component {
 
             if (nombres_m.length >= 1) {
               this.setState({
-                selectMacetero: nombres_m[0]
+                selectMacetero: nombres_m[0],
+                selectPlanta: nombres_p[0],
               });
             }
           })
@@ -101,7 +103,7 @@ class Main extends Component {
       <Container>          
         <Header hasTabs style={{backgroundColor: '#32CD32'}}>
           <Left>
-            <Icon name='menu' style={{color: 'white'}} onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: this.state.selectMacetero} )} }/>
+            <Icon name='menu' style={{color: 'white'}} onPress={() => {this.props.navigation.navigate('Menu',{ idMaceteroSelec: this.state.selectMacetero, nombrePlantaSelec: this.state.selectPlanta} )} }/>
           </Left>
           <Body>
             <Title style={styles.titulo}>SMartCetero</Title>

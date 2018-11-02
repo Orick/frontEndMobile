@@ -10,6 +10,7 @@ import crearUsuario from './components/crearUsuario';
 import agregarplanta from './components/agregarplanta';
 import agregarPlantaForm from './components/agregarPlantaForm';
 import Menu from './components/menu';
+import eliminarplanta from './components/eliminarplanta';
 import bluetooth from './components/bluetooth';
 
 import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
@@ -63,6 +64,7 @@ const Navigate = createStackNavigator(
     Login,
     recuperarContrasena,
     crearUsuario,
+    eliminarplanta
   },
   {
     initialRouteName: 'Login',
