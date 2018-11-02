@@ -14,11 +14,21 @@ class eliminarplanta extends Component {
     }
 
     eliminarMacetero () {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Login' })],
-          });
-          this.props.navigation.dispatch(resetAction);
+        fetch('http://142.93.125.238/macetero/delete',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: "idMacetero="+this.state.idMac
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('El macetero se elimino')
+            console.log(result);
+        })
+        .catch(function (error) {
+            console.log('error eliminando macetero');
+            console.log('error: ', error);
+        });
+        this.props.navigation.goBack();
     }
 
     componentWillMount(){
