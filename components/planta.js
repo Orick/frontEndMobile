@@ -40,7 +40,6 @@ class Planta extends Component {
             estadoPlanta: ''
         };
         this.recargar = this.recargar.bind(this);
-        this.fotos = this.fotos.bind(this);
         this.estadoplanta =this.estadoplanta.bind(this);
     }
 
@@ -54,10 +53,6 @@ class Planta extends Component {
         if(!hum && !luz){
             return 'Mal estado'
         }
-    }
-
-    fotos(){
-        //this.props.navigation.navigate('Fotos');
     }
     recargar(){
         firebase.auth().onAuthStateChanged((getuser) => {
@@ -226,9 +221,7 @@ class Planta extends Component {
                     </TouchableOpacity>
                 </Content>
                 <Content style={styles.fotos}>
-                    <TouchableOpacity onPress={ () => {
-                        this.fotos();
-                    }}>
+                    <TouchableOpacity onPress={ () => { this.props.navigation.navigate('fotos',{ idMaceteroSelec: this.props.idMacetero, plantaNombre: this.props.nombrePlanta}); }}>
                         <Image source={require('./../src/img/imagenes.png')} style={{height:60,width:60}}/>
                     </TouchableOpacity>
                 </Content>

@@ -37,7 +37,7 @@ class Main extends Component {
       return this.state.maceteros.map((data,index) => {
         return (
           <Tab key={index} heading={this.state.plantas[index]} tabStyle={{backgroundColor: '#32CD32'}}  activeTabStyle={{backgroundColor: '#32CD32'}} textStyle={{color: 'white'}}>
-            <Planta idMacetero={data}/>
+            <Planta idMacetero={data} nombrePlanta={this.state.plantas[index]} navigation={this.props.navigation}/>
           </Tab>
         )
       })

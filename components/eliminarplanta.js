@@ -53,15 +53,14 @@ class eliminarplanta extends Component {
                     <Image source={require('./../src/img/logo.png')} style={styles.logo}/>
 
                     <Content style={styles.contenedorTexto}>
-                        <Text style={styles.pregunta}>¿Esta seguro que desea eliminar el</Text>
-                        <Text style={styles.pregunta}>macetero con la planta {this.state.plantaMac}?</Text>
+                        <Text style={styles.pregunta}>¿Esta seguro que desea eliminar el macetero con la planta {this.state.plantaMac}?</Text>
                     </Content>
 
                     <Content>
-                        <Button rounded success style={styles.buttonLogin} onPress={() => {this.eliminarMacetero()} }>
+                        <Button rounded success style={styles.buttonOption} onPress={() => {this.eliminarMacetero()} }>
                             <Text>Eliminar Macetero</Text>
                         </Button>
-                        <Button rounded success style={styles.buttonLogin} onPress={()=>this.props.navigation.goBack()}>
+                        <Button rounded success style={styles.buttonOption} onPress={()=>this.props.navigation.goBack()}>
                             <Text>Volver</Text>
                         </Button>                
                     </Content>
@@ -90,13 +89,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginBottom: 10
     },
-    buttonLogin:{
+    buttonOption:{
         flex: 1,
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 5,
-        position: "relative",
-        bottom: 0
+        marginBottom: 5
     },
     logo: {
         height: 200, 
