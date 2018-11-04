@@ -57,10 +57,6 @@ class Menu extends Component {
                             <Text>Agregar macetero</Text>
                         </ListItem>
                         
-                        <ListItem>
-                            <Text>Configurar macetero</Text>
-                        </ListItem>
-                        
                         <ListItem
                         button
                         onPress={() => {this.props.navigation.push("editarplanta",{ idMacetero: this.state.idMacActual, plantaNombre: this.state.plantaMacActual})} }>
