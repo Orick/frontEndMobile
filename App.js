@@ -13,6 +13,7 @@ import Menu from './components/menu';
 import eliminarplanta from './components/eliminarplanta';
 import fotos from './components/fotos';
 import bluetooth from './components/bluetooth';
+import editarplanta from './components/editarplanta';
 
 import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
 
@@ -66,6 +67,8 @@ const Navigate = createStackNavigator(
     recuperarContrasena,
     crearUsuario,
     eliminarplanta,
+    editarplanta,
+    bluetooth,
     fotos
   },
   {

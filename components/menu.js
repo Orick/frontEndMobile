@@ -63,6 +63,12 @@ class Menu extends Component {
                         
                         <ListItem
                         button
+                        onPress={() => {this.props.navigation.push("editarplanta",{ idMacetero: this.state.idMacActual, plantaNombre: this.state.plantaMacActual})} }>
+                            <Text>Editar macetero</Text>
+                        </ListItem>
+
+                        <ListItem
+                        button
                         onPress={() => {this.props.navigation.push("eliminarplanta",{ idMacetero: this.state.idMacActual, plantaNombre: this.state.plantaMacActual})} }>
                             <Text>Eliminar macetero</Text>
                         </ListItem>
