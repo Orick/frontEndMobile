@@ -3,6 +3,7 @@ import {StyleSheet, Image, Dimensions} from 'react-native';
 import { Container, Content, Form, Item, Picker, Input, Label, Button, Text, Icon } from 'native-base';
 const {width} = Dimensions.get('window');
 import firebase from 'react-native-firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 
 class agregarPlantaForm extends Component {
@@ -61,8 +62,15 @@ class agregarPlantaForm extends Component {
                 .then(response => response.json())
                 .then(result2 => {
                     this.setState({textCreate: result2.description });
+
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Main' })],
+                    });
+                    this.props.navigation.dispatch(resetAction);
                 })
-        
+
+
             })
         }).catch(function (error) {
             console.log('error sacando token');

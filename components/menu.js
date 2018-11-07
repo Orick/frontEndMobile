@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {StyleSheet, Image} from 'react-native';
 import { Container, Content, List, ListItem, Text, Header, Body, Left, Icon, Title } from 'native-base';
 import { StackActions, NavigationActions } from 'react-navigation';
+import firebase from 'react-native-firebase';
 
 class Menu extends Component {
     constructor(props){
@@ -24,11 +25,18 @@ class Menu extends Component {
     }
 
     signOut () {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Login' })],
-          });
-          this.props.navigation.dispatch(resetAction);
+        firebase.auth().signOut()
+            .then( ok => {
+                console.log('DESLOG -->',ok);
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+            })
+            .catch( error => {
+                console.log('ERROR -->',error);
+        });
     }
 
     render() {

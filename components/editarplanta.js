@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Image, Dimensions} from 'react-native';
 import { Container, Content, Form, Item, Picker, Input, Label, Button, Text, Icon } from 'native-base';
+import { StackActions, NavigationActions } from 'react-navigation';
 const {width} = Dimensions.get('window');
 
 class editarplanta extends Component {
@@ -62,7 +63,11 @@ class editarplanta extends Component {
                 .then(result2 => {
                     this.setState({textCreate: result2.description });
                 })
-        this.props.navigation.goBack();
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                this.props.navigation.dispatch(resetAction);
     }
 
     componentWillMount(){

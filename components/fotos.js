@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Content, Header, Left, Body, Right, Text, Button, Icon, Title } from 'native-base';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { AppRegistry, Dimensions, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { RNCamera } from 'react-native-camera';
 import firebase from 'react-native-firebase';
+const {width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 class Fotos extends Component {
   constructor(props){
@@ -10,6 +13,7 @@ class Fotos extends Component {
       selectMacetero: '',
       selectPlanta:''
     };
+    this.takePicture = this.takePicture.bind(this);
   }
 
   componentWillMount(){
@@ -23,24 +27,44 @@ class Fotos extends Component {
     });
   }
 
+  takePicture = async function() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options)
+      console.log(data.uri);
+    }
+  };
+
   render() {
     return (        
     <Container>          
-        <Header style={{backgroundColor: '#32CD32'}}>
+        <Header style={{backgroundColor: '#32CD32', height: 50}}>
             <Left>
                 <Icon name='arrow-back' style={{color: 'white'}} onPress={()=>this.props.navigation.goBack()}/>
             </Left>
             <Body>
-                <Title style={styles.titulo}>Imagenes {this.state.selectPlanta}</Title>
+                <Title style={styles.titulo}>Foto para {this.state.selectPlanta}</Title>
             </Body>
         </Header>
 
-        <Text>{this.state.selectMacetero}</Text>
-
-        <Content style={styles.foto}>
-            <TouchableOpacity onPress={ () => {}}>
+        <Content style={styles.container}>
+            <RNCamera
+                ref={(cam) => {
+                    this.camera = cam;
+                }}
+                style = {styles.preview}
+                type={RNCamera.Constants.Type.back}
+                flashMode={RNCamera.Constants.FlashMode.auto}
+                permissionDialogTitle={'Permisos de camara'}
+                permissionDialogMessage={'Se requieren permisos para usar la camara'}
+                onGoogleVisionBarcodesDetected={({ barcodes }) => {
+                console.log(barcodes)
+                }}
+            >
+            <TouchableOpacity onPress={() => {this.takePicture()}} style = {styles.capture}>
                 <Image source={require('./../src/img/camera_button.png')} style={{height:80,width:80}}/>
             </TouchableOpacity>
+            </RNCamera>
         </Content>
     </Container> 
     );
@@ -48,21 +72,22 @@ class Fotos extends Component {
 }
 
 const styles = StyleSheet.create({
-    boton:{
-        height: 335,
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 10,
-    },
     titulo: {
-        textAlign: 'center',
+        textAlign: 'left',
         color: 'white',
     },
-    foto:{
-        height:80,
-        width:80,
-        position:'absolute', 
-        bottom:0,
+    container: {
+        backgroundColor: 'white'
+    },
+    preview: {
+        width: width,
+        height: height-74,
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    capture: {
+        flex: 0,
+        alignSelf: 'flex-start',
         marginLeft:20,
         marginBottom:20
     }

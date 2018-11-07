@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, Dimensions} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
 import firebase from 'react-native-firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
 const {width} = Dimensions.get('window');
 
 class Login extends Component {
@@ -35,6 +36,12 @@ class Login extends Component {
                 this.setState({textUsuario:"",textPass:"",textLogin:""}); 
                 //this.props.navigation.navigate('Main');
                 console.log('logeado');
+
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Main' })],
+                });
+                this.props.navigation.dispatch(resetAction);
             }else{
                 console.log('No logeado');
             }
@@ -161,9 +168,6 @@ class Login extends Component {
                     <Text>Recordar Contraseña</Text>
                 </Button>
             </Content>
-            <Button onPress={() => {this.desLogear()} }>
-            <Text>Deslogear</Text>
-            </Button>
         </Content>
     </Container>
     );
@@ -179,6 +183,11 @@ class Login extends Component {
 Boton de vista agregarplanta negro
 <Button onPress={() => {this.props.navigation.push('agregarplanta');} }>
 <Text>agregarplanta</Text>
+</Button>
+
+Boton de desloguear
+<Button onPress={() => {this.desLogear()} }>
+<Text>Deslogear</Text>
 </Button>
 */}
 

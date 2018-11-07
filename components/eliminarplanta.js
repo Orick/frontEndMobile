@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {StyleSheet, Image, Dimensions} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import { Container, Content, Left, Right, Text, Button } from 'native-base';
-const {width} = Dimensions.get('window');
+import { StackActions, NavigationActions } from 'react-navigation';
 
 class eliminarplanta extends Component {
     constructor(props){
@@ -23,12 +23,18 @@ class eliminarplanta extends Component {
         .then(result => {
             console.log('El macetero se elimino')
             console.log(result);
+
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Main' })],
+            });
+            this.props.navigation.dispatch(resetAction);
         })
         .catch(function (error) {
             console.log('error eliminando macetero');
             console.log('error: ', error);
         });
-        this.props.navigation.goBack();
+        //this.props.navigation.goBack();
     }
 
     componentWillMount(){
@@ -70,15 +76,6 @@ class eliminarplanta extends Component {
         );
     }
 }
-
-{/* <Content>
-    <Text>¿Esta seguro de que deseas eliminar el macetero con la planta {this.state.plantaMac}?</Text>
-</Content>
-
-<Content>
-    <Left><Button><Text>Si</Text></Button></Left>
-    <Right><Button><Text>No</Text></Button></Right>
-</Content> */}
 
 const styles = StyleSheet.create({
     contenedorTexto:{
