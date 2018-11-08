@@ -16,7 +16,6 @@ import {
   Dimensions,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import { stringToBytes } from 'convert-string';
 
 const window = Dimensions.get('window');
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -173,28 +172,39 @@ class agregarplantaform extends Component {
             // https://github.com/sandeepmistry/bleno/tree/master/examples/pizza
             BleManager.retrieveServices(peripheral.id).then((peripheralInfo) => {
               console.log(peripheralInfo);
-              var service = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-              var characteristic = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-              var str = "saludo desde el celular"
-              const data = stringToBytes(str);
+              var service = '13333333-3333-3333-3333-333333333337';
+              var bakeCharacteristic = '13333333-3333-3333-3333-333333330003';
+              var crustCharacteristic = '13333333-3333-3333-3333-333333330001';
 
+              setTimeout(() => {
+                BleManager.startNotification(peripheral.id, service, bakeCharacteristic).then(() => {
+                  console.log('Started notification on ' + peripheral.id);
                   setTimeout(() => {
-                    BleManager.write(peripheral.id, service, characteristic, data)
-                    .then(() => {
-                      // Success code
-                      this.setState({valor:1})
-                    })
-                    .catch((error) => {
-                      // Failure code
-                      this.setState({valor:2})
+                    BleManager.write(peripheral.id, service, crustCharacteristic, [0]).then(() => {
+                      console.log('Writed NORMAL crust');
+                      BleManager.write(peripheral.id, service, bakeCharacteristic, [1,95]).then(() => {
+                        console.log('Writed 351 temperature, the pizza should be BAKED');
+                        /*
+                        var PizzaBakeResult = {
+                          HALF_BAKED: 0,
+                          BAKED:      1,
+                          CRISPY:     2,
+                          BURNT:      3,
+                          ON_FIRE:    4
+                        };*/
+                      });
                     });
 
                   }, 500);
+                }).catch((error) => {
+                  console.log('Notification error', error);
+                });
+              }, 200);
             });
 
           }, 900);
         }).catch((error) => {
-          this.setState({valor:4})
+          console.log('Connection error', error);
         });
       }
     }
@@ -219,7 +229,6 @@ class agregarplantaform extends Component {
               <Text style={{textAlign: 'center'}}>No peripherals</Text>
             </View>
           }
-          <Text>{this.state.valor} </Text>
           <ListView
             enableEmptySections={true}
             dataSource={dataSource}

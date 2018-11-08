@@ -24,6 +24,7 @@ class agregarPlantaForm extends Component {
         this.agregarMacetero = this.agregarMacetero.bind(this);
         this.onValueChange = this.onValueChange.bind(this);
         this.plantasList = this.plantasList.bind(this);
+        this.startScan = this.startScan.bind(this);
     }
 
     plantasList(){
@@ -80,6 +81,16 @@ class agregarPlantaForm extends Component {
         });
 
     }
+
+    startScan() {
+        if (!this.state.scanning) {
+          this.setState({peripherals: new Map()});
+          BleManager.scan([], 3, true).then((results) => {
+            console.log('Scanning...');
+            this.setState({scanning:true});
+          });
+        }
+      }
 
     obtenerPlantas(){
         let tipoplanta = [];
@@ -215,8 +226,9 @@ class agregarPlantaForm extends Component {
                 <Button onPress={() => {this.props.navigation.push('bluetooth');} }>
                     <Text>Bluetooth</Text>
                 </Button>
-            </Content>
 
+            </Content>
+                
         </Form>
 
         <Button rounded success style={styles.buttonLogin} onPress={() => {this.agregarMacetero()} } >
