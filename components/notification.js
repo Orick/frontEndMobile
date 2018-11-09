@@ -24,7 +24,7 @@ class Notification extends Component {
     drawerLockMode: 'locked-closed'
   }) */
 
-  componentWillMount(){
+  componentDidMount(){
     const { navigation } = this.props;
     const idMacetero = navigation.getParam('idMacetero', 'Sinnombre');
     this.macetero(idMacetero);

@@ -14,7 +14,7 @@ class Menu extends Component {
       this.signOut = this.signOut.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         const { navigation } = this.props;
         const idMacetero = navigation.getParam('idMaceteroSelec', 'NoId');
         const plantaMacetero = navigation.getParam('nombrePlantaSelec', 'Noplanta');

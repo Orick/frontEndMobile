@@ -43,7 +43,7 @@ class Main extends Component {
       })
   }
 
-  componentWillMount(){
+  componentDidMount(){
     let user = firebase.auth().currentUser;
     let nombres_m = [];
     let nombres_p = [];
