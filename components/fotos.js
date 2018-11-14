@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Content, Header, Left, Body, Right, Text, Button, Icon, Title } from 'native-base';
-import { Dimensions, StyleSheet, Image, TouchableOpacity, CameraRoll, PermissionsAndroid } from 'react-native';
+import { Dimensions, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import RNFetchBlob from 'rn-fetch-blob';
+import { StackActions, NavigationActions } from 'react-navigation';
 const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
 const dirs = RNFetchBlob.fs.dirs
@@ -16,12 +17,12 @@ class Fotos extends Component {
       imagenDir:null
     };
     this.takePicture = this.takePicture.bind(this);
-    this.requestExternalStoragePermission = this.requestExternalStoragePermission.bind(this);
     this.renderCamera = this.renderCamera.bind(this);
     this.renderImage = this.renderImage.bind(this);
+    this.goBackView = this.goBackView.bind(this);
   }
 
-  componentWillMount(){
+  componentDidMount(){
     const { navigation } = this.props;
     let idMac = navigation.getParam('idMaceteroSelec', 'NoId');
     let nombrePlant = navigation.getParam('plantaNombre', 'NoNombre');
@@ -30,56 +31,15 @@ class Fotos extends Component {
         selectMacetero: idMac,
         selectPlanta: nombrePlant
     });
-
-    this.requestExternalStoragePermission()
-
-    RNFetchBlob.fs.isDir(dirs.DCIMDir + '/SmartCetero')
-    .then((isDir) => {
-        if (isDir == false) {
-            RNFetchBlob.fs.mkdir(dirs.DCIMDir + '/SmartCetero')
-            .then((res) => {})
-            .catch((error) => {
-                console.log(error);
-            });
-
-            RNFetchBlob.fs.mkdir(dirs.DCIMDir + '/SmartCetero/' + idMac)
-            .then((res) => {})
-            .catch((error) => {
-                console.log('No existe la carpeta SmartCetero');
-                console.log(error);
-            });
-        }else{
-            RNFetchBlob.fs.isDir(dirs.DCIMDir + '/SmartCetero/' + idMac)
-            .then((isDir) => {
-                if (isDir == false) {
-                    RNFetchBlob.fs.mkdir(dirs.DCIMDir + '/SmartCetero/' + idMac)
-                    .then((res) => {})
-                    .catch((error) => {
-                        console.log('Existe la carpeta SmartCetero');
-                        console.log(error); 
-                    });
-                }
-            })
-        }
-    })
   }
 
-  requestExternalStoragePermission = async function() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Permisos de almacenamiento',
-          message: 'La aplicación necesita acceso ' +
-            'al almacenamiento',
-        },
-      );
-      return granted;
-    } catch (err) {
-      console.error('Failed to request permission ', err);
-      return null;
-    }
-  };
+  goBackView(){
+    const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Main' })],
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
 
   takePicture = async function() {
     if (this.camera) {
@@ -98,12 +58,13 @@ class Fotos extends Component {
             this.setState({
                 imagenDir: 'file://' + file_dir
             });
+
+            //this.goBackView();
         })
-        .catch((error) => { console.log(error); });
-      
+        .catch((error) => { console.log(error); });    
       })
     }
-  };
+  }
 
   renderCamera(){
       return(
@@ -172,7 +133,7 @@ const styles = StyleSheet.create({
     },
     capture: {
         flex: 0,
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         marginLeft:20,
         marginBottom:20
     }

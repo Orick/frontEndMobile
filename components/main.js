@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Header, Left, Body, Right, Text, Button, Icon, Title, Tab, Tabs, ScrollableTab } from 'native-base';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, PermissionsAndroid } from 'react-native';
 import Planta from './planta';
 import firebase from 'react-native-firebase';
 
@@ -14,13 +14,27 @@ class Main extends Component {
       selectPlanta: '',
       currentTab: 0
     };
+    this.requestExternalStoragePermission = this.requestExternalStoragePermission.bind(this);
     this.maceterosList = this.maceterosList.bind(this);
     this.idMaceteroActTab = this.idMaceteroActTab.bind(this);
   }
 
-  /* static navigationOptions = ({ navigation }) => ({
-    drawerLabel: 'Inicio'
-  }) */
+  requestExternalStoragePermission = async function() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Permisos de almacenamiento',
+          message: 'La aplicación necesita acceso ' +
+            'al almacenamiento',
+        },
+      );
+      return granted;
+    } catch (err) {
+      console.error('Failed to request permission ', err);
+      return null;
+    }
+  }
 
   idMaceteroActTab(tab_index) {
     this.setState({
@@ -47,6 +61,9 @@ class Main extends Component {
     let user = firebase.auth().currentUser;
     let nombres_m = [];
     let nombres_p = [];
+
+    this.requestExternalStoragePermission()
+
     if (user) {
       fetch('http://142.93.125.238/macetero/maceterosUser/' + user.uid)
       .then(response => response.json())
@@ -95,8 +112,6 @@ class Main extends Component {
       });
     }
   }
-  
-  /* Icono a la izquierda del header, antigua funcion onPress={()=>this.props.navigation.openDrawer() */
 
   render() {
     return (        

@@ -4,27 +4,6 @@ import { Container, Content, Text } from 'native-base';
 import firebase from 'react-native-firebase';
 const { width } = Dimensions.get('window');
 
-// import { createStackNavigator } from 'react-navigation';
-// import agregarplanta from './components/agregarplanta';
-// import agregarplantaform from './components/agregarplantaform';
-
-//import Planta from './planta';
-//<Planta idMacetero={"macetero2"}/>
-
-
-// const Navigate = createStackNavigator(
-//     {
-//       Planta,
-//       agregarplanta,
-//       agregarplantaform
-//     },
-//     {
-//       initialRouteName: 'Planta',
-//       headerMode: 'none'
-//     }
-//   );
-//falta la galeria
-
 
 class Planta extends Component {
     constructor(props){
@@ -105,7 +84,6 @@ class Planta extends Component {
         });
     }
 
-    //false descargar foto
     componentWillMount(){
         console.log(this.props);
         firebase.auth().onAuthStateChanged((getuser) => {
@@ -159,7 +137,6 @@ class Planta extends Component {
     }
 
     render() {
-        console.log(this.state.estadoLuz);
         return (
             <Container style={{flexDirection: 'row'}}>
                 <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
@@ -221,7 +198,7 @@ class Planta extends Component {
                     </TouchableOpacity>
                 </Content>
                 <Content style={styles.fotos}>
-                    <TouchableOpacity onPress={ () => { this.props.navigation.navigate('fotos',{ idMaceteroSelec: this.props.idMacetero, plantaNombre: this.props.nombrePlanta}); }}>
+                    <TouchableOpacity onPress={ () => { this.props.navigation.navigate('galeria',{ idMaceteroSelec: this.props.idMacetero, plantaNombre: this.props.nombrePlanta}); }}>
                         <Image source={require('./../src/img/imagenes.png')} style={{height:60,width:60}}/>
                     </TouchableOpacity>
                 </Content>
