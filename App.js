@@ -13,6 +13,7 @@ import fotos from './components/fotos';
 import bluetooth from './components/bluetooth';
 import editarplanta from './components/editarplanta';
 import galeria from './components/galeria';
+import imagen from './components/imagen';
 
 import { createStackNavigator} from 'react-navigation';
 
@@ -30,7 +31,8 @@ const Navigate = createStackNavigator(
     editarplanta,
     bluetooth,
     fotos,
-    galeria
+    galeria,
+    imagen
   },
   {
     initialRouteName: 'Login',

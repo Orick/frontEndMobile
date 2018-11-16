@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, Dimensions, TouchableOpacity, View } from 'react-native';
 import { Container, Content, Text } from 'native-base';
 import firebase from 'react-native-firebase';
+import RNFetchBlob from 'rn-fetch-blob';
+const dirs = RNFetchBlob.fs.dirs
 const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
+const resizeMode = 'center';
 
 
 class Planta extends Component {
@@ -16,10 +20,12 @@ class Planta extends Component {
             valueHumedad: '0',
             valueLuz: '0',
             valueAgua: '0',
-            estadoPlanta: ''
+            estadoPlanta: '',
+            imageDir: ''
         };
         this.recargar = this.recargar.bind(this);
         this.estadoplanta =this.estadoplanta.bind(this);
+        this.renderImage = this.renderImage.bind(this);
     }
 
     estadoplanta(hum, luz){
@@ -38,7 +44,7 @@ class Planta extends Component {
             if(getuser){
                 getuser.getIdToken()
                         .then(Token => {
-                            console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
+                            //console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
                             fetch('http://142.93.125.238/sensores/getLast',{
                                     method: 'POST',
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -46,7 +52,7 @@ class Planta extends Component {
                                 })
                                 .then(response => response.json())
                                 .then(result => {
-                                    console.log("LASTO: ->>", result);
+                                    //console.log("LASTO: ->>", result);
                                     if(result.status == 1){
                                         this.setState({
                                             valueHumedad: result.Humedad,
@@ -84,13 +90,31 @@ class Planta extends Component {
         });
     }
 
-    componentWillMount(){
+    renderImage(){
+        if (this.state.imageDir == '') {
+            return(
+                <Image 
+                    source={require('./../src/img/fondo.jpg')} 
+                    style={styles.fondo}
+                />
+            );
+        }else{
+            return(
+                <Image
+                    style={styles.fondo_galeria}
+                    source={{ uri: this.state.imageDir }}
+                />
+            );
+        }
+    }
+
+    componentDidMount(){
         console.log(this.props);
         firebase.auth().onAuthStateChanged((getuser) => {
             if(getuser){
                 getuser.getIdToken()
                         .then(Token => {
-                            console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
+                            //console.log("token="+Token+"&idMacetero="+this.props.idMacetero);
                             fetch('http://142.93.125.238/sensores/getLast',{
                                     method: 'POST',
                                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -98,16 +122,41 @@ class Planta extends Component {
                                 })
                                 .then(response => response.json())
                                 .then(result => {
-                                    console.log("LASTO: ->>", result);
+                                    //console.log("LASTO: ->>", result);
                                     if(result.status == 1){
-                                        this.setState({
-                                            valueHumedad: result.Humedad,
-                                            valueLuz: result.Luz,
-                                            valueAgua: result.Agua,
-                                            estadoHumedad: result.estadoHumedad? 'green' : 'red',
-                                            estadoLuz: result.estadoLuz? 'green' : 'red',
-                                            estadoAgua: result.estadoAgua? 'green' : 'red',
-                                            estadoPlanta: this.estadoplanta(result.estadoHumedad,result.estadoLuz)
+
+                                        let foldermac_dir = dirs.DCIMDir + '/SmartCetero/' + this.props.idMacetero;
+
+                                        RNFetchBlob.fs.ls(foldermac_dir)
+                                        .then((files) => {
+
+                                            if (files.length == 0) {
+                                                this.setState({
+                                                    valueHumedad: result.Humedad,
+                                                    valueLuz: result.Luz,
+                                                    valueAgua: result.Agua,
+                                                    estadoHumedad: result.estadoHumedad? 'green' : 'red',
+                                                    estadoLuz: result.estadoLuz? 'green' : 'red',
+                                                    estadoAgua: result.estadoAgua? 'green' : 'red',
+                                                    estadoPlanta: this.estadoplanta(result.estadoHumedad,result.estadoLuz)
+                                                });
+                                            }else{
+                                                let file_dir = 'file://' + foldermac_dir + '/' + (files[files.length-1]).toString();
+
+                                                this.setState({
+                                                    valueHumedad: result.Humedad,
+                                                    valueLuz: result.Luz,
+                                                    valueAgua: result.Agua,
+                                                    estadoHumedad: result.estadoHumedad? 'green' : 'red',
+                                                    estadoLuz: result.estadoLuz? 'green' : 'red',
+                                                    estadoAgua: result.estadoAgua? 'green' : 'red',
+                                                    estadoPlanta: this.estadoplanta(result.estadoHumedad,result.estadoLuz),
+                                                    imageDir: file_dir
+                                                });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.log(error);
                                         });
                                     }else{
                                         this.setState({
@@ -137,9 +186,10 @@ class Planta extends Component {
     }
 
     render() {
+        console.log(this.state.imageDir);
         return (
-            <Container style={{flexDirection: 'row'}}>
-                <Image source={require('./../src/img/fondo.jpg')} style={styles.fondo}/>
+            <Container style={{flexDirection: 'row', backgroundColor:'transparent'}}>
+                {this.renderImage()}
 
                 <Content style={
                     { 
@@ -190,6 +240,7 @@ class Planta extends Component {
                 <Image source={require('./../src/img/llave.png')} style={styles.iconollave}/>
                 <Text style={{alignSelf: "center"}}>{this.state.valueAgua}</Text>
                 </Content>
+
                 <Content style={styles.recargar}>
                     <TouchableOpacity onPress={ () => {
                         this.recargar();
@@ -232,6 +283,11 @@ const styles = StyleSheet.create({
             { translateY: -330 }
           ]
     },
+    fondo_galeria:{
+        height: height-74,
+        width: width,
+        position: 'absolute'
+    },
     icon:{
         height: 80,
         width:80,
@@ -260,8 +316,7 @@ const styles = StyleSheet.create({
         bottom:0,
         marginLeft:20,
         marginBottom:25
-    }
-    
+    }    
 });
 
 export default Planta;

@@ -62,25 +62,24 @@ class Galeria extends Component {
 
     RNFetchBlob.fs.ls(foldermac_dir)
     .then((files) => {
-
         this.setState({
             imagesArr: this.state.imagesArr.concat(files)
         });
-
-        let file_dir = foldermac_dir + '/' + (files[files.length-1]).toString();
-        console.log('file://' + file_dir);
     })
   }
 
   renderGalery() {
       return this.state.imagesArr.map((data,index) => {
+        let imagen_ruta = 'file://' + dirs.DCIMDir + '/SmartCetero/' + this.state.selectMacetero + '/' + data
         return (
-          <Thumbnail
-          key={index}
-          square large
-          source={{ uri: 'file://' + dirs.DCIMDir + '/SmartCetero/' + this.state.selectMacetero + '/' + data }}
-          style={styles.preview}
-          />
+          <TouchableOpacity key={index} onPress={() => {this.props.navigation.navigate('imagen',{ idMaceteroSelec: this.state.selectMacetero, plantaNombre: this.state.selectPlanta, imagenRuta: imagen_ruta} )} }>
+            <Thumbnail
+            key={index}
+            square large
+            source={{ uri: imagen_ruta }}
+            style={styles.preview}
+            />
+          </TouchableOpacity>
         )
       })
   }

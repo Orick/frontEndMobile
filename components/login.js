@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, Dimensions} from 'react-native';
+import {StyleSheet, Image, Dimensions, PermissionsAndroid} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
 import firebase from 'react-native-firebase';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -14,27 +14,19 @@ class Login extends Component {
             textUsuario: "",
             textPass: "",
             textLogin:""
-            // modalVisibleRecordar: false,
-            // modalVisibleCrear: false
         };
         
         this.logear = this.logear.bind(this);
         this.desLogear = this.desLogear.bind(this);
-        // this.mostrarRecordarContrasena = this.mostrarRecordarContrasena.bind(this);
-        // this.mostrarCrearUsuario = this.mostrarCrearUsuario.bind(this);
+        this.requestExternalStoragePermission = this.requestExternalStoragePermission.bind(this);
     }
 
-    /* static navigationOptions = ({ navigation }) => ({
-        drawerLabel: 'Cerrar Sesión',
-        drawerLockMode: 'locked-closed'
-    }) */
-
-    componentWillMount(){
+    componentDidMount(){
+        this.requestExternalStoragePermission()
         firebase.auth().onAuthStateChanged((user) => {
             console.log(user);
             if(user){
-                this.setState({textUsuario:"",textPass:"",textLogin:""}); 
-                //this.props.navigation.navigate('Main');
+                this.setState({textUsuario:"",textPass:"",textLogin:""});
                 console.log('logeado');
 
                 const resetAction = StackActions.reset({
@@ -47,13 +39,23 @@ class Login extends Component {
             }
         });
     }
-    
-    // mostrarRecordarContrasena(visible){
-    //     this.setState({modalVisibleRecordar: visible});
-    // }
-    // mostrarCrearUsuario(visible){
-    //     this.setState({modalVisibleCrear: visible});
-    // }
+
+    requestExternalStoragePermission = async function() {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: 'Permisos de almacenamiento',
+              message: 'La aplicación necesita acceso ' +
+                'al almacenamiento',
+            },
+          );
+          return granted;
+        } catch (err) {
+          console.error('Failed to request permission ', err);
+          return null;
+        }
+      }
 
   logear(){
     console.log(this.state.email, this.state.pass);
@@ -174,85 +176,6 @@ class Login extends Component {
   }
 }
 
-
-{/* Boton notificiones negro 
-<Button onPress={() => {this.props.navigation.navigate('Notification',{ idMacetero: 'maceteroaleeh'} )} }>
-<Text> Notification </Text>
-</Button> 
-
-Boton de vista agregarplanta negro
-<Button onPress={() => {this.props.navigation.push('agregarplanta');} }>
-<Text>agregarplanta</Text>
-</Button>
-
-Boton de desloguear
-<Button onPress={() => {this.desLogear()} }>
-<Text>Deslogear</Text>
-</Button>
-*/}
-
-{/* <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisibleCrear}
-          onRequestClose={() => {
-            
-          }}>
-          <Content style={{marginTop: 22}}>
-              <Text>Crear USUARIO!</Text>
-              <Button
-                onPress={() => {
-                  this.mostrarCrearUsuario(!this.state.modalVisibleCrear);
-                }}>
-                <Text>Hide Modal</Text>
-              </Button>
-          </Content>
-        </Modal>
-
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisibleRecordar}
-          onRequestClose={() => {
-            
-          }}>
-          <Content style={{marginTop: 22}}>
-              <Text>Recordar Contraseña!</Text>
-              <Button
-                onPress={() => {
-                  this.mostrarRecordarContrasena(!this.state.modalVisibleRecordar);
-                }}>
-                <Text>Hide Modal</Text>
-              </Button>
-          </Content>
-        </Modal> */}
-
-
-
-
-
-{/* <Button transparent light onPress={() => { this.mostrarCrearUsuario(true); }}>
-                <Text>Crear Usuario</Text>
-            </Button> */}
-
-{/* <Button transparent light onPress={() => { this.mostrarRecordarContrasena(true); }}>
-                <Text>Recordar Contraseña</Text>
-            </Button> */}
-{/* <View style={styles.container}>
-        <TextInput
-          style={{height: 40}}
-          placeholder="Email"
-          onChangeText={(text) => this.setState({email:text})}
-        />
-        <TextInput
-          style={{height: 40}}
-          placeholder="Password"
-          onChangeText={(text) => this.setState({pass:text})}
-        />
-        <Button onPress={() => {this.logear()} } title="Logear" />
-        <Button onPress={() => {this.desLogear()} } title="DES Logear" />
-</View> */}
-
 const styles = StyleSheet.create({
     contenedorTexto:{
         opacity: 0.8,
@@ -331,6 +254,3 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-
-// /Users/alvarogutierrez/Library/Android/sdk/emulator/emulator -avd bestEmu
-// react-native log-android
